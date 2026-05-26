@@ -325,59 +325,6 @@
       border: 1px solid var(--glass-border);
     }
 
-    /* 8. Series */
-    /* .grid-series {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    .serie-card {
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .serie-card:hover { border-color: rgba(255, 110, 180, 0.3); }
-    .serie-card.expanded { border-color: var(--rosa); }
-    .serie-poster {
-      width: 100%;
-      aspect-ratio: 2 / 3;
-      object-fit: cover;
-      display: block;
-      background: var(--azul-noche);
-    }
-    .serie-info { padding: 14px; }
-    .serie-info h3 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.85rem;
-      color: var(--texto);
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-    .badge-genre {
-      display: inline-block;
-      font-size: 0.7rem;
-      padding: 4px 10px;
-      border-radius: 50px;
-      background: rgba(155, 89, 182, 0.25);
-      color: var(--cian);
-      border: 1px solid rgba(0, 229, 255, 0.25);
-    }
-    .serie-extra {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.45s ease;
-    }
-    .serie-card.expanded .serie-extra { max-height: 520px; }
-    .serie-extra-inner {
-      padding: 0 14px 14px;
-      font-size: 0.85rem;
-    }
-    .stars { color: #ffd700; letter-spacing: 2px; margin: 10px 0; font-size: 1rem; }
-    .serie-platform { color: var(--cian); font-size: 0.8rem; font-weight: 500; } */
 
     /* 9. MBTI */
     .mbti-tipo {
@@ -406,97 +353,6 @@
       background: rgba(255, 110, 180, 0.12);
       border: 1px solid rgba(255, 110, 180, 0.35);
       color: var(--rosa);
-    }
-
-    /* 10. Galería + lightbox */
-    .galeria-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .galeria-thumb {
-      cursor: pointer;
-      text-align: center;
-      border-radius: var(--radius);
-      overflow: hidden;
-      border: 1px solid var(--glass-border);
-      background: rgba(255, 255, 255, 0.03);
-      transition: var(--transition);
-    }
-    .galeria-thumb:hover {
-      border-color: var(--rosa);
-      transform: scale(1.02);
-    }
-    .galeria-thumb .g-visual {
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      background: rgba(13, 13, 43, 0.6);
-    }
-    .galeria-thumb figcaption {
-      padding: 10px;
-      font-size: 0.75rem;
-      color: var(--texto-suave);
-    }
-
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      background: rgba(5, 5, 16, 0.92);
-      backdrop-filter: blur(8px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-    .lightbox.open {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-    .lightbox-inner {
-      text-align: center;
-      max-width: 90vw;
-      max-height: 90vh;
-      position: relative;
-    }
-    .lightbox-emoji {
-      font-size: clamp(5rem, 20vw, 10rem);
-      display: block;
-      margin-bottom: 16px;
-      line-height: 1;
-    }
-    .lightbox-caption {
-      font-size: 1.1rem;
-      color: var(--texto);
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    .lightbox-close {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--glass);
-      border: 1px solid var(--rosa);
-      color: var(--texto);
-      font-size: 1.75rem;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 2001;
-      transition: var(--transition);
-    }
-    .lightbox-close:hover {
-      background: rgba(255, 110, 180, 0.2);
     }
 
     /* Explorar más */
@@ -1096,73 +952,6 @@
       </div>
     </section>
 
-    <!-- 8. Series -->
-    <!-- <section id="series" class="sobre-section container">
-      <h2 class="section-title">Series y películas</h2>
-      <div class="grid-series" id="grid-series">
-        <article class="serie-card" tabindex="0">
-          <img class="serie-poster" src="../assets/img/serie1.jpg" alt="El Juego del Calamar">
-          <div class="serie-info">
-            <h3>El Juego del Calamar</h3>
-            <span class="badge-genre">Thriller</span>
-          </div>
-          <div class="serie-extra">
-            <div class="serie-extra-inner">
-              <p><strong>Sinopsis:</strong> Participantes en situación límite compiten en juegos mortales por un premio millonario.</p>
-              <p><strong>Mi reseña:</strong> Intensa y adictiva; cada episodio mantiene la tensión hasta el final.</p>
-              <p class="stars" aria-label="Calificación 4 de 5">★★★★☆</p>
-              <p class="serie-platform">Netflix</p>
-            </div>
-          </div>
-        </article>
-        <article class="serie-card" tabindex="0">
-          <img class="serie-poster" src="../assets/img/serie2.jpg" alt="Breaking Bad">
-          <div class="serie-info">
-            <h3>Breaking Bad</h3>
-            <span class="badge-genre">Drama</span>
-          </div>
-          <div class="serie-extra">
-            <div class="serie-extra-inner">
-              <p><strong>Sinopsis:</strong> Un profesor de química se convierte en productor de metanfetamina tras un diagnóstico terminal.</p>
-              <p><strong>Mi reseña:</strong> Personajes complejos y una narrativa impecable; un clásico imprescindible.</p>
-              <p class="stars" aria-label="Calificación 5 de 5">★★★★★</p>
-              <p class="serie-platform">Netflix / AMC</p>
-            </div>
-          </div>
-        </article>
-        <article class="serie-card" tabindex="0">
-          <img class="serie-poster" src="../assets/img/serie3.jpg" alt="Spider-Man: No Way Home">
-          <div class="serie-info">
-            <h3>Spider-Man: No Way Home</h3>
-            <span class="badge-genre">Acción</span>
-          </div>
-          <div class="serie-extra">
-            <div class="serie-extra-inner">
-              <p><strong>Sinopsis:</strong> Peter Parker enfrenta las consecuencias de un hechizo que altera la realidad del multiverso.</p>
-              <p><strong>Mi reseña:</strong> Emocionante, nostálgica y perfecta para maratón con amigos.</p>
-              <p class="stars" aria-label="Calificación 5 de 5">★★★★★</p>
-              <p class="serie-platform">Disney+ / Cine</p>
-            </div>
-          </div>
-        </article>
-        <article class="serie-card" tabindex="0">
-          <img class="serie-poster" src="../assets/img/serie4.jpg" alt="Black Mirror">
-          <div class="serie-info">
-            <h3>Black Mirror</h3>
-            <span class="badge-genre">Ciencia ficción</span>
-          </div>
-          <div class="serie-extra">
-            <div class="serie-extra-inner">
-              <p><strong>Sinopsis:</strong> Antología que explora el lado oscuro de la tecnología y la sociedad moderna.</p>
-              <p><strong>Mi reseña:</strong> Provoca reflexión sobre el uso de la tecnología; ideal para quien ama el sci-fi.</p>
-              <p class="stars" aria-label="Calificación 4 de 5">★★★★☆</p>
-              <p class="serie-platform">Netflix</p>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section> -->
-
     <!-- 9. MBTI -->
     <section id="mbti" class="sobre-section container">
       <h2 class="section-title">Personalidad MBTI</h2>
@@ -1189,50 +978,6 @@
                 <span class="chip-rosa">Perfeccionismo</span>
                 <span class="chip-rosa">Delegación</span>
                 <span class="chip-rosa">Autoexigencia</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 10. Galería -->
-    <section id="galeria" class="sobre-section container">
-      <h2 class="section-title">Galería personal</h2>
-      <div class="accordion" id="acc-galeria">
-        <div class="accordion-item expand-card">
-          <button type="button" class="accordion-header">
-            <span class="acc-emoji">📸</span>
-            <span class="acc-title">Momentos especiales</span>
-            <span class="acc-arrow">›</span>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-body-inner">
-              <div class="galeria-grid">
-                <figure class="galeria-thumb" data-emoji="🎓" data-caption="Graduación escolar — un logro que marcó el inicio de mi camino universitario.">
-                  <div class="g-visual" aria-hidden="true">🎓</div>
-                  <figcaption>Graduación escolar</figcaption>
-                </figure>
-                <figure class="galeria-thumb" data-emoji="🏛️" data-caption="Primer día en UNHEVAL — emoción y determinación al iniciar Ingeniería de Sistemas.">
-                  <div class="g-visual" aria-hidden="true">🏛️</div>
-                  <figcaption>Primer día UNHEVAL</figcaption>
-                </figure>
-                <figure class="galeria-thumb" data-emoji="💻" data-caption="Hackathon universitario — noches de código, café y trabajo en equipo.">
-                  <div class="g-visual" aria-hidden="true">💻</div>
-                  <figcaption>Hackathon</figcaption>
-                </figure>
-                <figure class="galeria-thumb" data-emoji="🤝" data-caption="Voluntariado RSU — servicio a la comunidad y aprendizaje fuera del aula.">
-                  <div class="g-visual" aria-hidden="true">🤝</div>
-                  <figcaption>Voluntariado RSU</figcaption>
-                </figure>
-                <figure class="galeria-thumb" data-emoji="🌄" data-caption="Paseo en Huánuco — la naturaleza de mi tierra me recarga energías.">
-                  <div class="g-visual" aria-hidden="true">🌄</div>
-                  <figcaption>Paseo Huánuco</figcaption>
-                </figure>
-                <figure class="galeria-thumb" data-emoji="👨‍👩‍👧" data-caption="Mi familia — mi mayor apoyo en cada meta que persigo.">
-                  <div class="g-visual" aria-hidden="true">👨‍👩‍👧</div>
-                  <figcaption>Familia</figcaption>
-                </figure>
               </div>
             </div>
           </div>
@@ -1305,59 +1050,6 @@
           }
         });
       });
-
-      /* Series: toggle .expanded, una a la vez */
-      const series = document.querySelectorAll('.serie-card');
-      series.forEach(function (card) {
-        function toggle() {
-          const open = card.classList.contains('expanded');
-          series.forEach(function (c) { c.classList.remove('expanded'); });
-          if (!open) card.classList.add('expanded');
-        }
-        card.addEventListener('click', toggle);
-        card.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggle();
-          }
-        });
-      });
-
-      /* Lightbox galería */
-      const lightbox = document.getElementById('lightbox');
-      const lbEmoji = document.getElementById('lightbox-emoji');
-      const lbCaption = document.getElementById('lightbox-caption');
-      const lbClose = lightbox.querySelector('.lightbox-close');
-
-      function openLightbox(emoji, caption) {
-        lbEmoji.textContent = emoji;
-        lbCaption.textContent = caption;
-        lightbox.classList.add('open');
-        lightbox.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-      }
-
-      function closeLightbox() {
-        lightbox.classList.remove('open');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      }
-
-      document.querySelectorAll('.galeria-thumb').forEach(function (thumb) {
-        thumb.addEventListener('click', function (e) {
-          e.stopPropagation();
-          openLightbox(thumb.dataset.emoji, thumb.dataset.caption);
-        });
-      });
-
-      lbClose.addEventListener('click', closeLightbox);
-      lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox) closeLightbox();
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
-      });
-
       /* Recalcular acordeones tras imágenes */
       window.addEventListener('load', function () {
         document.querySelectorAll('.accordion-item.active .accordion-body').forEach(function (body) {
