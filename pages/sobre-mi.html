@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sobre Mí — Angela Raquel Canteño Córdova, Ingeniería de Sistemas UNHEVAL, Huánuco, Perú.">
+  <title>Sobre Mí | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    #petals-container {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .page-sobre { padding-bottom: 100px; }
+
+    .hero-sobre {
+      text-align: center;
+      padding: 100px 24px 48px;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 110, 180, 0.18), transparent 60%),
+                  radial-gradient(ellipse 60% 50% at 80% 20%, rgba(155, 89, 182, 0.12), transparent 50%),
+                  radial-gradient(ellipse 50% 40% at 20% 30%, rgba(255, 110, 180, 0.08), transparent 45%);
+    }
+
+    .hero-sobre h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .hero-sobre p {
+      max-width: 620px;
+      margin: 0 auto;
+      color: var(--texto-suave);
+    }
+
+    .sobre-section { margin-bottom: 64px; }
+
+    .sobre-section .section-title {
+      display: block;
+      margin-bottom: 28px;
+    }
+
+    .sobre-section .section-title::after {
+      left: 0;
+      transform: none;
+    }
+
+    /* ── Accordion / expand cards ── */
+    .accordion { display: flex; flex-direction: column; gap: 12px; }
+
+    .expand-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .expand-card.active,
+    .expand-card.expanded {
+      border-color: var(--rosa);
+      box-shadow: 0 8px 32px rgba(255, 110, 180, 0.22);
+    }
+
+    .accordion-header {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      text-align: left;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      color: var(--texto);
+    }
+
+    .acc-emoji { font-size: 1.5rem; flex-shrink: 0; }
+    .acc-title {
+      flex: 1;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--rosa);
+      word-break: break-word;
+    }
+    .acc-arrow {
+      flex-shrink: 0;
+      font-size: 1.25rem;
+      color: var(--cian);
+      transition: transform 0.35s ease;
+    }
+    .expand-card.active .acc-arrow { transform: rotate(90deg); }
+
+    .accordion-body-inner {
+      padding: 0 20px 20px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    /* 1. Quién soy */
+    .quien-body {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+    .quien-body img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--rosa);
+      flex-shrink: 0;
+    }
+    .quien-text { flex: 1; min-width: 0; }
+    .quien-text p { margin-bottom: 12px; }
+    .quien-text p:last-child { margin-bottom: 0; }
+
+    /* 2. Datos */
+    .accordion.grid-datos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .dato-icon { color: var(--cian); font-size: 1.1rem; width: 24px; text-align: center; }
+    .dato-valor { color: var(--texto); font-weight: 500; }
+
+    /* 3. Timeline */
+    .timeline-wrap { position: relative; padding: 20px 0; }
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, var(--rosa), var(--morado), var(--cian));
+      border-radius: 4px;
+    }
+    .timeline-list { list-style: none; position: relative; z-index: 1; }
+    .timeline-list.accordion {
+      display: block;
+      gap: 0;
+    }
+    .timeline-entry .accordion-item {
+      width: 100%;
+    }
+    .timeline-entry {
+      position: relative;
+      width: 50%;
+      margin-bottom: 28px;
+      padding-left: 0;
+      padding-right: 48px;
+    }
+    .timeline-entry:nth-child(even) {
+      margin-left: 50%;
+      padding-right: 0;
+      padding-left: 48px;
+    }
+    .timeline-dot {
+      position: absolute;
+      top: 24px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--rosa);
+      border: 3px solid var(--bg-primary);
+      box-shadow: 0 0 12px rgba(255, 110, 180, 0.6);
+      z-index: 2;
+    }
+    .timeline-entry:nth-child(odd) .timeline-dot { right: -57px; }
+    .timeline-entry:nth-child(even) .timeline-dot { left: -57px; }
+    .timeline-entry:nth-child(1) .timeline-dot { background: #ff6eb4; }
+    .timeline-entry:nth-child(2) .timeline-dot { background: #c56cd6; }
+    .timeline-entry:nth-child(3) .timeline-dot { background: #9b59b6; }
+    .timeline-entry:nth-child(4) .timeline-dot { background: #7b68ee; }
+    .timeline-entry:nth-child(5) .timeline-dot { background: #5b9bd5; }
+    .timeline-entry:nth-child(6) .timeline-dot { background: #00c9db; }
+    .timeline-entry:nth-child(7) .timeline-dot { background: #00e5ff; }
+    .timeline-entry:nth-child(8) .timeline-dot { background: #00e5ff; }
+
+    .timeline-year {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .timeline-card-title { font-weight: 600; color: var(--texto); margin-bottom: 6px; }
+    .timeline-preview { font-size: 0.875rem; }
+    .timeline-expand img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      border: 1px solid var(--glass-border);
+    }
+
+    /* 4. Valores */
+    .accordion.grid-valores {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .valor-card .accordion-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+    }
+    .valor-card .acc-emoji { font-size: 2.5rem; animation: float 3s ease-in-out infinite; }
+    .valor-card .acc-title { flex: none; }
+    .valor-short {
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+      padding: 0 16px 14px;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .valor-frase {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-left: 3px solid var(--rosa);
+      font-style: italic;
+      color: var(--cian);
+      background: rgba(255, 110, 180, 0.06);
+      border-radius: 0 12px 12px 0;
+    }
+
+    /* 5. Hobbies */
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .hobby-card {
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+    .hobby-card:hover {
+      border-color: rgba(255, 110, 180, 0.35);
+      transform: translateY(-4px);
+    }
+    .hobby-card .h-emoji { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+    .hobby-card h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--rosa);
+      margin-bottom: 8px;
+    }
+    .hobby-card p { font-size: 0.8rem; line-height: 1.4; }
+
+    /* 6. Frases */
+    .frase-texto {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: var(--texto);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .frase-autor { color: var(--cian); font-weight: 600; margin-bottom: 10px; }
+
+    /* 7. Artistas */
+    .grid-artistas {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .artista-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .artista-card:hover { border-color: rgba(255, 110, 180, 0.3); }
+    .artista-card.expanded { border-color: var(--rosa); }
+    .artista-front {
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .artista-front .a-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+    .artista-front h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .artista-front .a-genre { font-size: 0.8rem; color: var(--texto-suave); }
+    .artista-extra {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .artista-card.expanded .artista-extra { max-height: 400px; }
+    .artista-extra-inner {
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--glass-border);
+    }
+    .artista-extra img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 12px 0;
+      border: 1px solid var(--glass-border);
+    }
+
+    /* 8. Series */
+    /* .grid-series {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .serie-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .serie-card:hover { border-color: rgba(255, 110, 180, 0.3); }
+    .serie-card.expanded { border-color: var(--rosa); }
+    .serie-poster {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+      background: var(--azul-noche);
+    }
+    .serie-info { padding: 14px; }
+    .serie-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      color: var(--texto);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .badge-genre {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 50px;
+      background: rgba(155, 89, 182, 0.25);
+      color: var(--cian);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+    }
+    .serie-extra {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.45s ease;
+    }
+    .serie-card.expanded .serie-extra { max-height: 520px; }
+    .serie-extra-inner {
+      padding: 0 14px 14px;
+      font-size: 0.85rem;
+    }
+    .stars { color: #ffd700; letter-spacing: 2px; margin: 10px 0; font-size: 1rem; }
+    .serie-platform { color: var(--cian); font-size: 0.8rem; font-weight: 500; } */
+
+    /* 9. MBTI */
+    .mbti-tipo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .chip-cian {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 50px;
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      color: var(--cian);
+    }
+    .chip-rosa {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border-radius: 50px;
+      background: rgba(255, 110, 180, 0.12);
+      border: 1px solid rgba(255, 110, 180, 0.35);
+      color: var(--rosa);
+    }
+
+    /* 10. Galería + lightbox */
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .galeria-thumb {
+      cursor: pointer;
+      text-align: center;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.03);
+      transition: var(--transition);
+    }
+    .galeria-thumb:hover {
+      border-color: var(--rosa);
+      transform: scale(1.02);
+    }
+    .galeria-thumb .g-visual {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      background: rgba(13, 13, 43, 0.6);
+    }
+    .galeria-thumb figcaption {
+      padding: 10px;
+      font-size: 0.75rem;
+      color: var(--texto-suave);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(5, 5, 16, 0.92);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .lightbox.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    .lightbox-inner {
+      text-align: center;
+      max-width: 90vw;
+      max-height: 90vh;
+      position: relative;
+    }
+    .lightbox-emoji {
+      font-size: clamp(5rem, 20vw, 10rem);
+      display: block;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+    .lightbox-caption {
+      font-size: 1.1rem;
+      color: var(--texto);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--glass);
+      border: 1px solid var(--rosa);
+      color: var(--texto);
+      font-size: 1.75rem;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 2001;
+      transition: var(--transition);
+    }
+    .lightbox-close:hover {
+      background: rgba(255, 110, 180, 0.2);
+    }
+
+    /* Explorar más */
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.1);
+    }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .accordion.grid-datos { grid-template-columns: repeat(2, 1fr); }
+      .accordion.grid-valores { grid-template-columns: repeat(2, 1fr); }
+      .hobbies-grid { grid-template-columns: repeat(2, 1fr); }
+      .grid-artistas,
+      .grid-series { grid-template-columns: repeat(2, 1fr); }
+      .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .timeline-line { left: 20px; transform: none; }
+      .timeline-entry,
+      .timeline-entry:nth-child(even) {
+        width: 100%;
+        margin-left: 0;
+        padding-left: 52px;
+        padding-right: 0;
+      }
+      .timeline-entry:nth-child(odd) .timeline-dot,
+      .timeline-entry:nth-child(even) .timeline-dot {
+        left: 11px;
+        right: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .accordion.grid-datos,
+      .accordion.grid-valores,
+      .hobbies-grid,
+      .grid-artistas,
+      .grid-series,
+      .galeria-grid {
+        grid-template-columns: 1fr;
+      }
+      .quien-body { flex-direction: column; align-items: center; }
+      .quien-text { text-align: center; }
+      .quien-text p { text-align: left; }
+      .hero-sobre { padding-top: 88px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="petals-container" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html" class="active">Sobre Mí</a></li>
+        <li><a href="formacion.html">Formación</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="habilidades.html">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-sobre">
+    <section class="hero-sobre">
+      <div class="container">
+        <h1>Sobre Mí</h1>
+        <p>Conoce mi historia, mis valores, pasiones y todo lo que me define como persona y futura ingeniera de sistemas.</p>
+      </div>
+    </section>
+
+    <!-- 1. Quién soy -->
+    <section id="quien-soy" class="sobre-section container">
+      <h2 class="section-title">Quién soy</h2>
+      <div class="accordion" id="acc-quien">
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🙋</span>
+            <span class="acc-title">Conóceme</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner quien-body">
+              <img src="../assets/img/perfil.jpg" alt="Angela Raquel Canteño Córdova">
+              <div class="quien-text">
+                <p>Soy Angela Raquel Canteño Córdova, estudiante de Ingeniería de Sistemas en la UNHEVAL, Huánuco, Perú. Me apasiona la tecnología, el aprendizaje continuo y crear soluciones que impacten positivamente a las personas.</p>
+                <p>Curso el VII ciclo (2026-I) en la facultad FIISMEC. Disfruto trabajar en equipo, asumir retos académicos y transformar ideas en proyectos concretos con buenas prácticas de desarrollo.</p>
+                <p>Este portafolio documenta mi formación, certificaciones, proyectos y metas. Creo en la perseverancia, la creatividad y en usar la ingeniería como herramienta de cambio personal y social.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Datos personales -->
+    <section id="datos-personales" class="sobre-section container">
+      <h2 class="section-title">Datos personales</h2>
+      <div class="accordion grid-datos" id="acc-datos">
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-id-card dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Nombre completo</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">Angela Raquel Canteño Córdova</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-cake-candles dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Edad</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">20 años</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-location-dot dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Ubicación</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">Huánuco, Perú</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-building-columns dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Universidad</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">Universidad Nacional Hermilio Valdizán (UNHEVAL)</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-laptop-code dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Carrera</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">Ingeniería de Sistemas</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-graduation-cap dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Ciclo académico</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">VII Ciclo · 2026-I</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-school dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Facultad</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">FIISMEC — Facultad de Ingeniería Industrial, Sistemas, Mecánica y Electrónica</p></div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <i class="fa-solid fa-language dato-icon" aria-hidden="true"></i>
+            <span class="acc-title">Idiomas</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner"><p class="dato-valor">Español nativo · Inglés básico (en formación)</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Timeline -->
+    <section id="timeline" class="sobre-section container">
+      <h2 class="section-title">Timeline de vida</h2>
+      <div class="timeline-wrap">
+        <div class="timeline-line" aria-hidden="true"></div>
+        <ol class="timeline-list accordion" id="acc-timeline">
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">👶</span>
+                  <span class="acc-title"><span class="timeline-year">2005</span> | Nacimiento</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Nacimiento en Huánuco</p>
+                    <p class="timeline-preview">Inicio de mi historia 11/09/2005 en Perú.</p>
+                    <img src="../assets/img/timeline1.jpg" alt="2004 — Nacimiento">
+                    <p>Nací en Huánuco, ciudad que me vio crecer rodeada de familia, tradiciones y el deseo de superarme cada día. Desde pequeña mostré curiosidad por aprender y ayudar a quienes me rodean.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">📖</span>
+                  <span class="acc-title"><span class="timeline-year">2012 - 2016</span> | Primaria</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Educación primaria</p>
+                    <p class="timeline-preview">Bases en lectura, matemáticas y trabajo en equipo.</p>
+                    <img src="../assets/img/timeline2.jpeg" alt="2012 — Primaria">
+                    <p>En primaria desarrollé disciplina y hábitos de estudio. Participé en actividades escolares que fortalecieron mi comunicación y mi sentido de responsabilidad.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">🏫</span>
+                  <span class="acc-title"><span class="timeline-year">2017 - 2021</span> | Secundaria</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Educación secundaria</p>
+                    <p class="timeline-preview">Interés creciente por matemática y tecnología.</p>
+                    <img src="../assets/img/timeline3.jpeg" alt="2017 — Secundaria">
+                    <p>En secundaria descubrí mi afinidad con las materias lógicas y la informática. Comencé a imaginar una carrera vinculada a sistemas y soluciones digitales.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">🎓</span>
+                  <span class="acc-title"><span class="timeline-year">2022 -2023</span> — Etapa preuniversitaria</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Egreso de secundaria</p>
+                    <p class="timeline-preview">Meta clara: estudiar Ingeniería de Sistemas.</p>
+                    <img src="../assets/img/timeline4.jpeg" alt="2022 -2023 —  Etapa preuniversitaria">
+                    <p>Terminé el colegio con el propósito de ingresar a la universidad. Preparé mi postulación enfocada en una carrera que combinara creatividad, lógica e innovación.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">🏛️</span>
+                  <span class="acc-title"><span class="timeline-year">2023</span> | UNHEVAL</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Ingreso a la universidad</p>
+                    <p class="timeline-preview">Inicio de Ingeniería de Sistemas en UNHEVAL.</p>
+                    <img src="../assets/img/timeline5.jpeg" alt="2023 — UNHEVAL">
+                    <p>Ingresé a UNHEVAL para formalizar mi pasión por la tecnología. Conocí programación, redes, bases de datos y la importancia del trabajo colaborativo en proyectos reales.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">💡</span>
+                  <span class="acc-title"><span class="timeline-year">2024</span> | Proyectos</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Primeros proyectos académicos</p>
+                    <p class="timeline-preview">Desarrollo de software en equipo.</p>
+                    <img src="../assets/img/timeline6.jpeg" alt="2024 — Proyectos">
+                    <p>Desarrollé proyectos universitarios aplicando metodologías ágiles, control de versiones y diseño de interfaces. Cada entrega fue un paso hacia mi perfil profesional.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">🤝</span>
+                  <span class="acc-title"><span class="timeline-year">2025</span> | Voluntariados</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Voluntariados y RSU</p>
+                    <p class="timeline-preview">Compromiso social universitario.</p>
+                    <img src="../assets/img/timeline7.jpeg" alt="2025 — Voluntariados">
+                    <p>Participé en actividades de responsabilidad social y voluntariados, fortaleciendo liderazgo, empatía y sentido de servicio hacia mi comunidad.</p>
+                  </div>
+                </div>
+              </div>
+          </li>
+          <li class="timeline-entry">
+            <span class="timeline-dot" aria-hidden="true"></span>
+              <div class="accordion-item expand-card">
+                <button type="button" class="accordion-header">
+                  <span class="acc-emoji">✨</span>
+                  <span class="acc-title"><span class="timeline-year">2026</span> | Portafolio</span>
+                  <span class="acc-arrow">›</span>
+                </button>
+                <div class="accordion-body">
+                  <div class="accordion-body-inner timeline-expand">
+                    <p class="timeline-card-title">Este portafolio web</p>
+                    <p class="timeline-preview">VII ciclo — consolidación profesional.</p>
+                    <img src="../assets/img/timeline8.png" alt="2026 — Portafolio">
+                    <p>En 2026 presento este portafolio como reflejo de mi crecimiento académico, mis certificaciones, proyectos y la visión que tengo para mi futuro como ingeniera de sistemas.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 4. Valores -->
+    <section id="valores" class="sobre-section container">
+      <h2 class="section-title">Mis valores</h2>
+      <div class="accordion grid-valores" id="acc-valores">
+        <div class="accordion-item expand-card valor-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🎨</span>
+            <span class="acc-title">Creatividad</span>
+          </button>
+          <p class="valor-short">Imagino soluciones originales en cada reto.</p>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>La creatividad me permite ver los problemas desde distintos ángulos y proponer ideas frescas en mis proyectos académicos y personales.</p>
+              <p class="valor-frase">«La creatividad es la inteligencia divirtiéndose.» — Albert Einstein</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card valor-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">✅</span>
+            <span class="acc-title">Responsabilidad</span>
+          </button>
+          <p class="valor-short">Cumplo mis compromisos con integridad.</p>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Asumo con seriedad cada tarea, entrega y rol en equipo. La confianza se construye con hechos constantes.</p>
+              <p class="valor-frase">«La disciplina es el puente entre metas y logros.» — Jim Rohn</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card valor-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🔥</span>
+            <span class="acc-title">Perseverancia</span>
+          </button>
+          <p class="valor-short">Sigo adelante aunque el camino sea difícil.</p>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Aprendo de cada error y no me detengo hasta lograr lo que me propongo, paso a paso.</p>
+              <p class="valor-frase">«El éxito es la suma de pequeños esfuerzos repetidos.» — Robert Collier</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card valor-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">💪</span>
+            <span class="acc-title">Compromiso</span>
+          </button>
+          <p class="valor-short">Doy lo mejor en todo lo que emprendo.</p>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Me comprometo con mi familia, mi universidad y mi desarrollo profesional con dedicación y pasión.</p>
+              <p class="valor-frase">«El compromiso convierte la promesa en realidad.» — Abraham Lincoln</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Hobbies -->
+    <section id="hobbies" class="sobre-section container">
+      <h2 class="section-title">Hobbies</h2>
+      <div class="hobbies-grid">
+        <article class="hobby-card">
+          <span class="h-emoji">🎵</span>
+          <h3>Música</h3>
+          <p>Playlists para estudiar y descubrir artistas nuevos.</p>
+        </article>
+        <article class="hobby-card">
+          <span class="h-emoji">📺</span>
+          <h3>Series</h3>
+          <p>Drama, ciencia ficción y historias con giros inesperados.</p>
+        </article>
+        <article class="hobby-card">
+          <span class="h-emoji">🎮</span>
+          <h3>Gaming</h3>
+          <p>Estrategia y cooperación en mundos virtuales.</p>
+        </article>
+        <article class="hobby-card">
+          <span class="h-emoji">🌿</span>
+          <h3>Naturaleza</h3>
+          <p>Caminatas al aire libre en Huánuco y alrededores.</p>
+        </article>
+        <article class="hobby-card">
+          <span class="h-emoji">💻</span>
+          <h3>Tecnología</h3>
+          <p>Explorar herramientas, código y tendencias tech.</p>
+        </article>
+        <article class="hobby-card">
+          <span class="h-emoji">📚</span>
+          <h3>Lectura</h3>
+          <p>Artículos de desarrollo personal y tecnología.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 6. Frases -->
+    <section id="frases" class="sobre-section container">
+      <h2 class="section-title">Frases motivadoras</h2>
+      <div class="accordion" id="acc-frases">
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-title">01 — «El futuro pertenece a quienes…»</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p class="frase-texto">«El futuro pertenece a quienes creen en la belleza de sus sueños.»</p>
+              <p class="frase-autor">— Eleanor Roosevelt</p>
+              <p>Me recuerda confiar en mis metas aunque el camino parezca incierto.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-title">02 — «La única forma de hacer…»</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p class="frase-texto">«La única forma de hacer un gran trabajo es amar lo que haces.»</p>
+              <p class="frase-autor">— Steve Jobs</p>
+              <p>Me inspira a elegir proyectos con propósito y disfrutar el proceso.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-title">03 — «No cuentes los días…»</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p class="frase-texto">«No cuentes los días, haz que los días cuenten.»</p>
+              <p class="frase-autor">— Muhammad Ali</p>
+              <p>Cada día es una oportunidad para avanzar hacia mis objetivos.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-title">04 — «La educación es el arma…»</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p class="frase-texto">«La educación es el arma más poderosa que puedes usar para cambiar el mundo.»</p>
+              <p class="frase-autor">— Nelson Mandela</p>
+              <p>Valoro mi formación en UNHEVAL como herramienta de cambio.</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-title">05 — «Sé tú misma…»</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p class="frase-texto">«Sé tú misma; todos los demás ya están tomados.»</p>
+              <p class="frase-autor">— Oscar Wilde</p>
+              <p>Me anima a ser auténtica y no comparar mi ritmo con otros.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Artistas -->
+    <section id="artistas" class="sobre-section container">
+      <h2 class="section-title">Artistas favoritos</h2>
+      <div class="grid-artistas" id="grid-artistas">
+        <article class="artista-card" tabindex="0">
+          <div class="artista-front">
+            <span class="a-emoji">🎤</span>
+            <h3>Enrique Iglesias</h3>
+            <p class="a-genre">pop latino / música urbana</p>
+          </div>
+          <div class="artista-extra">
+            <div class="artista-extra-inner">
+              <img src="../assets/img/artista1.jpg" alt="Enrique Iglesias">
+              <p><strong>Canción favorita:</strong> «Bailando»</p>
+              <p>Me gusta su autenticidad, variedad, ritmo urbano y el estilo de sus canciones.</p>
+            </div>
+          </div>
+        </article>
+        <article class="artista-card" tabindex="0">
+          <div class="artista-front">
+            <span class="a-emoji">🎤</span>
+            <h3>William Luna</h3>
+            <p class="a-genre">Folclor contemporáneo andino</p>
+          </div>
+          <div class="artista-extra">
+            <div class="artista-extra-inner">
+              <img src="../assets/img/artista2.jpg" alt="William Luna">
+              <p><strong>Canción favorita:</strong> «Sin tu amor»</p>
+              <p> Me gusta su estilo de música tradicional peruana combinado con sonidos y letras románticas.</p>
+            </div>
+          </div>
+        </article>
+        <article class="artista-card" tabindex="0">
+          <div class="artista-front">
+            <span class="a-emoji">🎤</span>
+            <h3>Stray Kids</h3>
+            <p class="a-genre">K pop / Hip-hop</p>
+          </div>
+          <div class="artista-extra">
+            <div class="artista-extra-inner">
+              <img src="../assets/img/artista3.png" alt="Bizarrap">
+              <p><strong>Canción favorita:</strong> «Grow up»</p>
+              <p>Sus producciones son perfectas para concentrarme y recargar energía.</p>
+            </div>
+          </div>
+        </article>
+        <article class="artista-card" tabindex="0">
+          <div class="artista-front">
+            <span class="a-emoji">🎤</span>
+            <h3>Coldplay</h3>
+            <p class="a-genre">Rock alternativo / Pop</p>
+          </div>
+          <div class="artista-extra">
+            <div class="artista-extra-inner">
+              <img src="../assets/img/artista4.jpg" alt="Coldplay">
+              <p><strong>Canción favorita:</strong> «Yellow»</p>
+              <p>Sus melodías emotivas me acompañan en momentos de reflexión y estudio.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 8. Series -->
+    <!-- <section id="series" class="sobre-section container">
+      <h2 class="section-title">Series y películas</h2>
+      <div class="grid-series" id="grid-series">
+        <article class="serie-card" tabindex="0">
+          <img class="serie-poster" src="../assets/img/serie1.jpg" alt="El Juego del Calamar">
+          <div class="serie-info">
+            <h3>El Juego del Calamar</h3>
+            <span class="badge-genre">Thriller</span>
+          </div>
+          <div class="serie-extra">
+            <div class="serie-extra-inner">
+              <p><strong>Sinopsis:</strong> Participantes en situación límite compiten en juegos mortales por un premio millonario.</p>
+              <p><strong>Mi reseña:</strong> Intensa y adictiva; cada episodio mantiene la tensión hasta el final.</p>
+              <p class="stars" aria-label="Calificación 4 de 5">★★★★☆</p>
+              <p class="serie-platform">Netflix</p>
+            </div>
+          </div>
+        </article>
+        <article class="serie-card" tabindex="0">
+          <img class="serie-poster" src="../assets/img/serie2.jpg" alt="Breaking Bad">
+          <div class="serie-info">
+            <h3>Breaking Bad</h3>
+            <span class="badge-genre">Drama</span>
+          </div>
+          <div class="serie-extra">
+            <div class="serie-extra-inner">
+              <p><strong>Sinopsis:</strong> Un profesor de química se convierte en productor de metanfetamina tras un diagnóstico terminal.</p>
+              <p><strong>Mi reseña:</strong> Personajes complejos y una narrativa impecable; un clásico imprescindible.</p>
+              <p class="stars" aria-label="Calificación 5 de 5">★★★★★</p>
+              <p class="serie-platform">Netflix / AMC</p>
+            </div>
+          </div>
+        </article>
+        <article class="serie-card" tabindex="0">
+          <img class="serie-poster" src="../assets/img/serie3.jpg" alt="Spider-Man: No Way Home">
+          <div class="serie-info">
+            <h3>Spider-Man: No Way Home</h3>
+            <span class="badge-genre">Acción</span>
+          </div>
+          <div class="serie-extra">
+            <div class="serie-extra-inner">
+              <p><strong>Sinopsis:</strong> Peter Parker enfrenta las consecuencias de un hechizo que altera la realidad del multiverso.</p>
+              <p><strong>Mi reseña:</strong> Emocionante, nostálgica y perfecta para maratón con amigos.</p>
+              <p class="stars" aria-label="Calificación 5 de 5">★★★★★</p>
+              <p class="serie-platform">Disney+ / Cine</p>
+            </div>
+          </div>
+        </article>
+        <article class="serie-card" tabindex="0">
+          <img class="serie-poster" src="../assets/img/serie4.jpg" alt="Black Mirror">
+          <div class="serie-info">
+            <h3>Black Mirror</h3>
+            <span class="badge-genre">Ciencia ficción</span>
+          </div>
+          <div class="serie-extra">
+            <div class="serie-extra-inner">
+              <p><strong>Sinopsis:</strong> Antología que explora el lado oscuro de la tecnología y la sociedad moderna.</p>
+              <p><strong>Mi reseña:</strong> Provoca reflexión sobre el uso de la tecnología; ideal para quien ama el sci-fi.</p>
+              <p class="stars" aria-label="Calificación 4 de 5">★★★★☆</p>
+              <p class="serie-platform">Netflix</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section> -->
+
+    <!-- 9. MBTI -->
+    <section id="mbti" class="sobre-section container">
+      <h2 class="section-title">Personalidad MBTI</h2>
+      <div class="accordion" id="acc-mbti">
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🧠</span>
+            <span class="acc-title">Mi Personalidad</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p class="mbti-tipo">INFJ</p>
+              <p><strong>El Abogado</strong> — Introvertida, Intuitiva, Sentimental, Juzgadora</p>
+              <p style="margin-top:12px">Como INFJ combino empatía profunda con visión a largo plazo. Busco significado en lo que hago, valoro la autenticidad y prefiero ambientes donde pueda aportar con reflexión y propósito. Soy idealista, organizada y orientada a ayudar a otros desde la creatividad.</p>
+              <p style="margin-top:16px"><strong>Fortalezas</strong></p>
+              <div class="chip-list">
+                <span class="chip-cian">Empática</span>
+                <span class="chip-cian">Organizada</span>
+                <span class="chip-cian">Creativa</span>
+              </div>
+              <p style="margin-top:16px"><strong>Áreas de mejora</strong></p>
+              <div class="chip-list">
+                <span class="chip-rosa">Perfeccionismo</span>
+                <span class="chip-rosa">Delegación</span>
+                <span class="chip-rosa">Autoexigencia</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. Galería -->
+    <section id="galeria" class="sobre-section container">
+      <h2 class="section-title">Galería personal</h2>
+      <div class="accordion" id="acc-galeria">
+        <div class="accordion-item expand-card">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">📸</span>
+            <span class="acc-title">Momentos especiales</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <div class="galeria-grid">
+                <figure class="galeria-thumb" data-emoji="🎓" data-caption="Graduación escolar — un logro que marcó el inicio de mi camino universitario.">
+                  <div class="g-visual" aria-hidden="true">🎓</div>
+                  <figcaption>Graduación escolar</figcaption>
+                </figure>
+                <figure class="galeria-thumb" data-emoji="🏛️" data-caption="Primer día en UNHEVAL — emoción y determinación al iniciar Ingeniería de Sistemas.">
+                  <div class="g-visual" aria-hidden="true">🏛️</div>
+                  <figcaption>Primer día UNHEVAL</figcaption>
+                </figure>
+                <figure class="galeria-thumb" data-emoji="💻" data-caption="Hackathon universitario — noches de código, café y trabajo en equipo.">
+                  <div class="g-visual" aria-hidden="true">💻</div>
+                  <figcaption>Hackathon</figcaption>
+                </figure>
+                <figure class="galeria-thumb" data-emoji="🤝" data-caption="Voluntariado RSU — servicio a la comunidad y aprendizaje fuera del aula.">
+                  <div class="g-visual" aria-hidden="true">🤝</div>
+                  <figcaption>Voluntariado RSU</figcaption>
+                </figure>
+                <figure class="galeria-thumb" data-emoji="🌄" data-caption="Paseo en Huánuco — la naturaleza de mi tierra me recarga energías.">
+                  <div class="g-visual" aria-hidden="true">🌄</div>
+                  <figcaption>Paseo Huánuco</figcaption>
+                </figure>
+                <figure class="galeria-thumb" data-emoji="👨‍👩‍👧" data-caption="Mi familia — mi mayor apoyo en cada meta que persigo.">
+                  <div class="g-visual" aria-hidden="true">👨‍👩‍👧</div>
+                  <figcaption>Familia</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explorar más -->
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="formacion.html">🎓 Formación</a>
+        <a href="cursos.html">📚 Cursos</a>
+        <a href="certificados.html">🏆 Certificados</a>
+        <a href="proyectos.html">💻 Proyectos</a>
+        <a href="habilidades.html">🛠️ Habilidades</a>
+        <a href="eventos.html">🎉 Eventos</a>
+        <a href="viajes-metas.html">✈️ Metas</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Vista ampliada">
+    <button type="button" class="lightbox-close" aria-label="Cerrar">&times;</button>
+    <div class="lightbox-inner">
+      <span class="lightbox-emoji" id="lightbox-emoji"></span>
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      /* Artistas: toggle .expanded, una a la vez */
+      const artistas = document.querySelectorAll('.artista-card');
+      artistas.forEach(function (card) {
+        function toggle() {
+          const open = card.classList.contains('expanded');
+          artistas.forEach(function (c) { c.classList.remove('expanded'); });
+          if (!open) card.classList.add('expanded');
+        }
+        card.addEventListener('click', toggle);
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+
+      /* Series: toggle .expanded, una a la vez */
+      const series = document.querySelectorAll('.serie-card');
+      series.forEach(function (card) {
+        function toggle() {
+          const open = card.classList.contains('expanded');
+          series.forEach(function (c) { c.classList.remove('expanded'); });
+          if (!open) card.classList.add('expanded');
+        }
+        card.addEventListener('click', toggle);
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+
+      /* Lightbox galería */
+      const lightbox = document.getElementById('lightbox');
+      const lbEmoji = document.getElementById('lightbox-emoji');
+      const lbCaption = document.getElementById('lightbox-caption');
+      const lbClose = lightbox.querySelector('.lightbox-close');
+
+      function openLightbox(emoji, caption) {
+        lbEmoji.textContent = emoji;
+        lbCaption.textContent = caption;
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.galeria-thumb').forEach(function (thumb) {
+        thumb.addEventListener('click', function (e) {
+          e.stopPropagation();
+          openLightbox(thumb.dataset.emoji, thumb.dataset.caption);
+        });
+      });
+
+      lbClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+
+      /* Recalcular acordeones tras imágenes */
+      window.addEventListener('load', function () {
+        document.querySelectorAll('.accordion-item.active .accordion-body').forEach(function (body) {
+          body.style.maxHeight = body.scrollHeight + 'px';
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

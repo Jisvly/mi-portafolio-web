@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mis Certificados — Angela Raquel Canteño Córdova, Ingeniería de Sistemas UNHEVAL.">
+  <title>Certificados | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    #sparkles-container {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .sparkle {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      animation: twinkle ease-in-out infinite;
+      opacity: 0.6;
+    }
+
+    .page-cert { padding-bottom: 100px; }
+
+    .hero-cert {
+      text-align: center;
+      padding: 100px 24px 48px;
+      background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(180, 140, 40, 0.3), transparent 55%),
+                  radial-gradient(ellipse 60% 50% at 70% 30%, rgba(155, 89, 182, 0.25), transparent 50%),
+                  radial-gradient(ellipse 50% 45% at 20% 40%, rgba(120, 80, 20, 0.12), transparent 45%);
+    }
+
+    .hero-cert h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), #ffd700);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .hero-cert .hero-sub {
+      color: var(--texto-suave);
+      font-size: 1.05rem;
+    }
+
+    .hero-cert .counter-wrap {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    #cert-counter {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffd700;
+    }
+
+    /* Grid certificados */
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .cert-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px;
+      cursor: pointer;
+      transition: var(--transition);
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .cert-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 30px rgba(255, 215, 0, 0.25);
+      border-color: rgba(255, 215, 0, 0.35);
+    }
+
+    .cert-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 8px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255, 110, 180, 0.2), rgba(255, 215, 0, 0.15));
+    }
+
+    .cert-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .cert-img-wrap.no-img img { display: none; }
+
+    .cert-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      background: linear-gradient(135deg, rgba(255, 110, 180, 0.25), rgba(255, 215, 0, 0.2));
+    }
+
+    .cert-img-wrap.no-img .cert-fallback { display: flex; }
+
+    .badge-inst {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .badge-icpna { background: rgba(0, 100, 200, 0.2); border: 1px solid rgba(0, 150, 255, 0.4); color: #6ecfff; }
+    .badge-fcc { background: rgba(0, 150, 80, 0.2); border: 1px solid rgba(0, 200, 100, 0.4); color: #5ee89a; }
+    .badge-coursera { background: rgba(30, 120, 200, 0.2); border: 1px solid rgba(50, 150, 220, 0.45); color: #7eb8ff; }
+    .badge-google { background: rgba(220, 80, 60, 0.2); border: 1px solid rgba(255, 120, 80, 0.4); color: #ff9a7a; }
+    .badge-hubspot { background: rgba(255, 120, 0, 0.2); border: 1px solid rgba(255, 160, 50, 0.45); color: #ffb84d; }
+    .badge-microsoft { background: rgba(0, 120, 215, 0.2); border: 1px solid rgba(0, 160, 255, 0.45); color: #5eb8ff; }
+    .badge-cisco { background: rgba(0, 160, 220, 0.2); border: 1px solid rgba(0, 200, 255, 0.45); color: #00d4ff; }
+    .badge-oracle { background: rgba(200, 50, 50, 0.2); border: 1px solid rgba(255, 80, 80, 0.4); color: #ff8a8a; }
+
+    .cert-card h3 {
+      color: var(--texto);
+      font-weight: 600;
+      font-size: 0.95rem;
+      line-height: 1.35;
+    }
+
+    .cert-inst {
+      color: var(--cian);
+      font-size: 0.8rem;
+    }
+
+    .cert-year {
+      color: var(--texto-suave);
+      font-size: 0.78rem;
+    }
+
+    .cert-card .btn-secondary {
+      padding: 8px 18px;
+      font-size: 0.8rem;
+      margin-top: auto;
+      align-self: flex-start;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #lightbox.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .lightbox-content {
+      position: relative;
+      width: 90%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      animation: fadeInUp 0.3s ease;
+      overflow-wrap: break-word;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      color: var(--rosa);
+      font-size: 1.75rem;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 2;
+      transition: var(--transition);
+    }
+
+    .lightbox-close:hover {
+      transform: scale(1.1);
+      color: #ff9ed0;
+    }
+
+    .lb-img-wrap {
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255, 110, 180, 0.15), rgba(255, 215, 0, 0.1));
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lb-img-wrap img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .lb-img-wrap .lb-fallback {
+      font-size: 4rem;
+      padding: 40px;
+      display: none;
+    }
+
+    .lb-img-wrap.no-img img { display: none; }
+    .lb-img-wrap.no-img .lb-fallback { display: block; }
+
+    .lb-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+
+    .lb-inst {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--cian);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .lb-meta {
+      color: var(--texto-suave);
+      font-size: 0.85rem;
+      margin-bottom: 14px;
+    }
+
+    .lb-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .lb-chips-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--rosa);
+      margin-bottom: 8px;
+    }
+
+    .cert-chip {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      color: var(--cian);
+      margin: 3px;
+    }
+
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.1);
+    }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .cert-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .cert-grid { grid-template-columns: 1fr; }
+      .hero-cert { padding-top: 88px; }
+      .lightbox-content { padding: 24px 18px; width: 95%; }
+      .lb-img-wrap img { max-height: 260px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sparkles-container" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="formacion.html">Formación</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="certificados.html" class="active">Certificados</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="habilidades.html">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-cert">
+    <section class="hero-cert">
+      <div class="container">
+        <h1>Mis Certificados</h1>
+        <p class="hero-sub">
+          <span class="counter-wrap">
+            <span id="cert-counter" data-counter="10" data-duration="1800">0</span>
+            certificaciones obtenidas
+          </span>
+        </p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="cert-grid" id="cert-grid">
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado1.png"
+          data-title="Inglés Nivel Básico"
+          data-inst="ICPNA"
+          data-badge="badge-icpna"
+          data-icon="fa-language"
+          data-year="2024"
+          data-hours="120"
+          data-desc="Certificación de inglés básico con enfoque en comunicación general, lectura de textos técnicos y vocabulario aplicado al ámbito profesional y académico."
+          data-skills="Listening,Speaking,Reading,Writing">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado1.png" alt="Inglés Nivel Básico" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-icpna">ICPNA</span>
+          <h3>Inglés Nivel Básico</h3>
+          <p class="cert-inst">ICPNA</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado2.png"
+          data-title="HTML &amp; CSS Fundamentals"
+          data-inst="freeCodeCamp"
+          data-badge="badge-fcc"
+          data-icon="fa-code"
+          data-year="2023"
+          data-hours="300"
+          data-desc="Certificación en fundamentos de desarrollo web front-end: estructura semántica, estilos, layout responsive y buenas prácticas de accesibilidad."
+          data-skills="HTML5,CSS3,Responsive Design">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado2.png" alt="HTML &amp; CSS Fundamentals" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-fcc">freeCodeCamp</span>
+          <h3>HTML &amp; CSS Fundamentals</h3>
+          <p class="cert-inst">freeCodeCamp</p>
+          <p class="cert-year">2023</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado3.png"
+          data-title="Introducción a Python"
+          data-inst="Coursera / Google"
+          data-badge="badge-coursera"
+          data-icon="fa-brands fa-python"
+          data-year="2024"
+          data-hours="40"
+          data-desc="Curso introductorio de programación en Python: sintaxis, estructuras de control, funciones y resolución de problemas con enfoque práctico."
+          data-skills="Python,Lógica,Algoritmos">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado3.png" alt="Introducción a Python" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-coursera">Coursera / Google</span>
+          <h3>Introducción a Python</h3>
+          <p class="cert-inst">Coursera / Google</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado4.png"
+          data-title="Diseño UX/UI Básico"
+          data-inst="Google Activate"
+          data-badge="badge-google"
+          data-icon="fa-palette"
+          data-year="2024"
+          data-hours="40"
+          data-desc="Fundamentos de experiencia de usuario e interfaces: investigación básica, wireframes, prototipos y pruebas de usabilidad con herramientas digitales."
+          data-skills="Figma,Wireframes,Prototipado">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado4.png" alt="Diseño UX/UI Básico" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-google">Google Activate</span>
+          <h3>Diseño UX/UI Básico</h3>
+          <p class="cert-inst">Google Activate</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado5.png"
+          data-title="Marketing Digital"
+          data-inst="HubSpot Academy"
+          data-badge="badge-hubspot"
+          data-icon="fa-bullhorn"
+          data-year="2024"
+          data-hours="35"
+          data-desc="Introducción al marketing digital: SEO, redes sociales, embudos de conversión y métricas básicas con herramientas de analítica web."
+          data-skills="SEO,Redes Sociales,Analytics">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado5.png" alt="Marketing Digital" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-hubspot">HubSpot Academy</span>
+          <h3>Marketing Digital</h3>
+          <p class="cert-inst">HubSpot Academy</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado6.png"
+          data-title="Excel Avanzado"
+          data-inst="Microsoft Learn"
+          data-badge="badge-microsoft"
+          data-icon="fa-file-excel"
+          data-year="2023"
+          data-hours="20"
+          data-desc="Dominio de funciones avanzadas, tablas dinámicas, gráficos profesionales y automatización básica con macros en hojas de cálculo."
+          data-skills="Tablas dinámicas,Macros,Fórmulas">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado6.png" alt="Excel Avanzado" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-microsoft">Microsoft Learn</span>
+          <h3>Excel Avanzado</h3>
+          <p class="cert-inst">Microsoft Learn</p>
+          <p class="cert-year">2023</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado7.png"
+          data-title="Administración de Redes"
+          data-inst="Cisco NetAcad"
+          data-badge="badge-cisco"
+          data-icon="fa-network-wired"
+          data-year="2024"
+          data-hours="70"
+          data-desc="Fundamentos de redes de computadoras: modelo OSI/TCP-IP, direccionamiento, routing, switching y configuración básica de equipos."
+          data-skills="TCP/IP,Routing,Switching">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado7.png" alt="Administración de Redes" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-cisco">Cisco NetAcad</span>
+          <h3>Administración de Redes</h3>
+          <p class="cert-inst">Cisco NetAcad</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado8.png"
+          data-title="Fundamentos de Ciberseguridad"
+          data-inst="Cisco NetAcad"
+          data-badge="badge-cisco"
+          data-icon="fa-shield-halved"
+          data-year="2024"
+          data-hours="30"
+          data-desc="Conceptos de seguridad informática: amenazas comunes, políticas de protección, firewalls y buenas prácticas para usuarios y organizaciones."
+          data-skills="Seguridad,Firewall,Amenazas">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado8.png" alt="Fundamentos de Ciberseguridad" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-cisco">Cisco NetAcad</span>
+          <h3>Fundamentos de Ciberseguridad</h3>
+          <p class="cert-inst">Cisco NetAcad</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado9.png"
+          data-title="Liderazgo y Gestión de Proyectos"
+          data-inst="Coursera"
+          data-badge="badge-coursera"
+          data-icon="fa-users"
+          data-year="2023"
+          data-hours="25"
+          data-desc="Habilidades de liderazgo, comunicación en equipos, planificación de tareas y fundamentos de gestión de proyectos colaborativos."
+          data-skills="Liderazgo,Gestión,Trabajo en equipo">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado9.png" alt="Liderazgo y Gestión de Proyectos" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-coursera">Coursera</span>
+          <h3>Liderazgo y Gestión de Proyectos</h3>
+          <p class="cert-inst">Coursera</p>
+          <p class="cert-year">2023</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+        <article class="glass-card cert-card" tabindex="0"
+          data-img="../assets/img/certificado10.png"
+          data-title="Base de Datos SQL"
+          data-inst="Oracle Academy"
+          data-badge="badge-oracle"
+          data-icon="fa-database"
+          data-year="2024"
+          data-hours="45"
+          data-desc="Modelado relacional, consultas SQL, joins, agregaciones y diseño de bases de datos para aplicaciones empresariales."
+          data-skills="SQL,Consultas,Modelado">
+          <div class="cert-img-wrap">
+            <img src="../assets/img/certificado10.png" alt="Base de Datos SQL" loading="lazy">
+            <div class="cert-fallback" aria-hidden="true">🏆</div>
+          </div>
+          <span class="badge-inst badge-oracle">Oracle Academy</span>
+          <h3>Base de Datos SQL</h3>
+          <p class="cert-inst">Oracle Academy</p>
+          <p class="cert-year">2024</p>
+          <button type="button" class="btn-secondary">Ver certificado</button>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="sobre-mi.html">🙋 Sobre Mí</a>
+        <a href="formacion.html">🎓 Formación</a>
+        <a href="cursos.html">📚 Cursos</a>
+        <a href="proyectos.html">💻 Proyectos</a>
+        <a href="habilidades.html">🛠️ Habilidades</a>
+        <a href="eventos.html">🎉 Eventos</a>
+        <a href="viajes-metas.html">✈️ Metas</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <!-- Lightbox -->
+  <div id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="lb-title">
+    <div class="lightbox-content" id="lightbox-content">
+      <button type="button" class="lightbox-close" aria-label="Cerrar">&times;</button>
+      <div class="lb-img-wrap" id="lb-img-wrap">
+        <img id="lb-img" src="" alt="">
+        <span class="lb-fallback" aria-hidden="true">🏆</span>
+      </div>
+      <h2 class="lb-title" id="lb-title"></h2>
+      <p class="lb-inst" id="lb-inst">
+        <i class="fa-solid" id="lb-icon" aria-hidden="true"></i>
+        <span id="lb-inst-text"></span>
+      </p>
+      <p class="lb-meta" id="lb-meta"></p>
+      <p class="lb-desc" id="lb-desc"></p>
+      <p class="lb-chips-title">Habilidades aprendidas</p>
+      <div id="lb-chips"></div>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      /* Sparkles */
+      var sparklesBox = document.getElementById('sparkles-container');
+      if (sparklesBox) {
+        for (var i = 0; i < 25; i++) {
+          var s = document.createElement('div');
+          s.className = 'sparkle';
+          var size = Math.floor(Math.random() * 9) + 4;
+          var hue = Math.floor(Math.random() * 360);
+          var dur = (Math.random() * 2 + 1).toFixed(1);
+          var del = (Math.random() * 2).toFixed(1);
+          s.style.width = size + 'px';
+          s.style.height = size + 'px';
+          s.style.left = Math.random() * 100 + '%';
+          s.style.top = Math.random() * 100 + '%';
+          s.style.background = 'hsl(' + hue + ', 85%, 65%)';
+          s.style.animationDuration = dur + 's';
+          s.style.animationDelay = del + 's';
+          sparklesBox.appendChild(s);
+        }
+      }
+
+      /* Fallback imágenes en cards */
+      document.querySelectorAll('.cert-img-wrap img').forEach(function (img) {
+        img.addEventListener('error', function () {
+          img.closest('.cert-img-wrap').classList.add('no-img');
+        });
+        if (!img.complete || img.naturalHeight === 0) {
+          if (img.complete && img.naturalHeight === 0) {
+            img.closest('.cert-img-wrap').classList.add('no-img');
+          }
+        }
+      });
+
+      /* Lightbox */
+      var lightbox = document.getElementById('lightbox');
+      var lbContent = document.getElementById('lightbox-content');
+      var lbImg = document.getElementById('lb-img');
+      var lbImgWrap = document.getElementById('lb-img-wrap');
+      var lbTitle = document.getElementById('lb-title');
+      var lbInstText = document.getElementById('lb-inst-text');
+      var lbIcon = document.getElementById('lb-icon');
+      var lbMeta = document.getElementById('lb-meta');
+      var lbDesc = document.getElementById('lb-desc');
+      var lbChips = document.getElementById('lb-chips');
+      var closeBtn = lightbox.querySelector('.lightbox-close');
+
+      function openLightbox(card) {
+        var imgSrc = card.dataset.img;
+        lbImg.src = imgSrc;
+        lbImg.alt = card.dataset.title;
+        lbImgWrap.classList.remove('no-img');
+        lbImg.onload = function () { lbImgWrap.classList.remove('no-img'); };
+        lbImg.onerror = function () { lbImgWrap.classList.add('no-img'); };
+
+        lbTitle.textContent = card.dataset.title;
+        lbInstText.textContent = card.dataset.inst;
+        var icon = card.dataset.icon || 'fa-certificate';
+        lbIcon.className = icon.includes('fa-brands') || icon.includes('fa-solid')
+          ? icon
+          : 'fa-solid ' + icon;
+        lbMeta.textContent = card.dataset.year + ' · ' + card.dataset.hours + ' horas';
+        lbDesc.textContent = card.dataset.desc;
+
+        lbChips.innerHTML = '';
+        (card.dataset.skills || '').split(',').forEach(function (skill) {
+          var chip = document.createElement('span');
+          chip.className = 'cert-chip';
+          chip.textContent = skill.trim();
+          lbChips.appendChild(chip);
+        });
+
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+
+      document.querySelectorAll('.cert-card').forEach(function (card) {
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('.btn-secondary')) e.preventDefault();
+          openLightbox(card);
+        });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLightbox(card);
+          }
+        });
+        card.querySelector('.btn-secondary').addEventListener('click', function (e) {
+          e.stopPropagation();
+          openLightbox(card);
+        });
+      });
+
+      closeBtn.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+    })();
+  </script>
+</body>
+</html>

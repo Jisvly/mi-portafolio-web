@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mis Habilidades — Angela Raquel Canteño Córdova, Ingeniería de Sistemas UNHEVAL.">
+  <title>Habilidades | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    :root {
+      --dorado: #ffd700;
+    }
+
+    #mandalas-container {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .mandala {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid var(--rosa);
+      box-shadow: inset 0 0 30px var(--morado);
+      opacity: 0.06;
+      animation: rotateSlow linear infinite;
+    }
+
+    .mandala::before,
+    .mandala::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .mandala::before {
+      width: 72%;
+      height: 72%;
+      outline: 1px solid rgba(255, 110, 180, 0.5);
+      outline-offset: -8px;
+    }
+
+    .mandala::after {
+      width: 48%;
+      height: 48%;
+      outline: 1px solid rgba(155, 89, 182, 0.6);
+      outline-offset: -4px;
+    }
+
+    .page-habilidades { padding-bottom: 100px; }
+
+    .hero-hab {
+      text-align: center;
+      padding: 100px 24px 40px;
+      background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(0, 180, 200, 0.22), transparent 55%),
+                  radial-gradient(ellipse 60% 50% at 70% 30%, rgba(26, 26, 78, 0.55), transparent 50%);
+    }
+
+    .hero-hab h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .hero-hab p {
+      color: var(--texto-suave);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .hab-section {
+      margin-bottom: 56px;
+    }
+
+    .hab-section .section-title {
+      display: block;
+      margin-bottom: 28px;
+    }
+
+    .hab-section .section-title::after {
+      left: 0;
+      transform: none;
+    }
+
+    /* Barras técnicas */
+    .skills-list {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .skill-bar-wrap {
+      margin-bottom: 20px;
+    }
+
+    .skill-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      gap: 12px;
+    }
+
+    .skill-bar-name {
+      font-weight: 600;
+      color: var(--texto);
+      font-size: 0.95rem;
+    }
+
+    .skill-bar-pct {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .skill-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 50px;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      transition: width 1.2s ease-out;
+    }
+
+    /* Blandas — círculos */
+    .soft-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .soft-card {
+      text-align: center;
+      padding: 28px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .circle-skill {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 0 auto 12px;
+      background: conic-gradient(
+        var(--rosa) 0%,
+        var(--rosa) var(--pct, 0%),
+        var(--glass) var(--pct, 0%),
+        var(--glass) 100%
+      );
+      transition: --pct 1.2s ease-out;
+      flex-shrink: 0;
+    }
+
+    @property --pct {
+      syntax: '<percentage>';
+      inherits: false;
+      initial-value: 0%;
+    }
+
+    .circle-skill::before {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+    }
+
+    .circle-pct {
+      position: relative;
+      z-index: 1;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      color: var(--texto);
+      font-weight: 700;
+    }
+
+    .soft-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--texto);
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    /* Herramientas */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+    }
+
+    .tool-card {
+      text-align: center;
+      padding: 24px 12px;
+      transition: var(--transition);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 28px rgba(155, 89, 182, 0.35);
+      border-color: rgba(155, 89, 182, 0.4);
+    }
+
+    .tool-emoji {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .tool-name {
+      color: var(--texto);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .tool-desc {
+      font-size: 0.75rem;
+      color: var(--texto-suave);
+      line-height: 1.35;
+    }
+
+    /* Idiomas */
+    .lang-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .lang-card {
+      flex: 1 1 280px;
+      max-width: 500px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lang-flag {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .lang-name {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--texto);
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+    }
+
+    .lang-level {
+      color: var(--cian);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .lang-stars {
+      margin-bottom: 12px;
+      letter-spacing: 4px;
+    }
+
+    .star {
+      color: var(--dorado);
+      font-size: 1.1rem;
+    }
+
+    .star.empty {
+      opacity: 0.25;
+    }
+
+    .lang-desc {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      line-height: 1.5;
+    }
+
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+    }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .soft-grid { grid-template-columns: repeat(2, 1fr); }
+      .tools-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 480px) {
+      .soft-grid,
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hero-hab { padding-top: 88px; }
+      .lang-card { flex: 1 1 100%; max-width: 100%; }
+      .circle-skill {
+        width: 100px;
+        height: 100px;
+      }
+      .circle-pct { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="mandalas-container" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="formacion.html">Formación</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="habilidades.html" class="active">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-habilidades">
+    <section class="hero-hab">
+      <div class="container">
+        <h1>Mis Habilidades</h1>
+        <p>Competencias técnicas y blandas que me definen</p>
+      </div>
+    </section>
+
+    <!-- Técnicas -->
+    <section id="tecnicas" class="hab-section container">
+      <h2 class="section-title">Habilidades Técnicas</h2>
+      <div class="skills-list">
+        <div class="skill-bar-wrap" data-pct="80">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">HTML / CSS</span>
+            <span class="skill-bar-pct">80%</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap" data-pct="55">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">JavaScript</span>
+            <span class="skill-bar-pct">55%</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap" data-pct="45">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">Python</span>
+            <span class="skill-bar-pct">45%</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap" data-pct="60">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">SQL</span>
+            <span class="skill-bar-pct">60%</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap" data-pct="65">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">Redes / Cisco</span>
+            <span class="skill-bar-pct">65%</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill"></div>
+          </div>
+        </div>
+        <div class="skill-bar-wrap" data-pct="55">
+          <div class="skill-bar-header">
+            <span class="skill-bar-name">Diseño UI</span>
+            <span class="skill-bar-pct">55%</span>
+          </div>
+          <div class="skill-bar-bg">
+            <div class="skill-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Blandas -->
+    <section id="blandas" class="hab-section container">
+      <h2 class="section-title">Habilidades Blandas</h2>
+      <div class="soft-grid">
+        <article class="glass-card soft-card" data-pct="85">
+          <div class="circle-skill"><span class="circle-pct">85%</span></div>
+          <p class="soft-name">Comunicación</p>
+        </article>
+        <article class="glass-card soft-card" data-pct="90">
+          <div class="circle-skill"><span class="circle-pct">90%</span></div>
+          <p class="soft-name">Trabajo en equipo</p>
+        </article>
+        <article class="glass-card soft-card" data-pct="70">
+          <div class="circle-skill"><span class="circle-pct">70%</span></div>
+          <p class="soft-name">Liderazgo</p>
+        </article>
+        <article class="glass-card soft-card" data-pct="80">
+          <div class="circle-skill"><span class="circle-pct">80%</span></div>
+          <p class="soft-name">Creatividad</p>
+        </article>
+        <article class="glass-card soft-card" data-pct="88">
+          <div class="circle-skill"><span class="circle-pct">88%</span></div>
+          <p class="soft-name">Responsabilidad</p>
+        </article>
+        <article class="glass-card soft-card" data-pct="82">
+          <div class="circle-skill"><span class="circle-pct">82%</span></div>
+          <p class="soft-name">Adaptabilidad</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Herramientas -->
+    <section id="herramientas" class="hab-section container">
+      <h2 class="section-title">Herramientas</h2>
+      <div class="tools-grid">
+        <article class="glass-card tool-card">
+          <span class="tool-emoji" aria-hidden="true">💻</span>
+          <p class="tool-name">VS Code</p>
+          <p class="tool-desc">Editor principal para desarrollo web</p>
+        </article>
+        <article class="glass-card tool-card">
+          <span class="tool-emoji" aria-hidden="true">🌐</span>
+          <p class="tool-name">Cisco Packet Tracer</p>
+          <p class="tool-desc">Simulación de redes y topologías</p>
+        </article>
+        <article class="glass-card tool-card">
+          <span class="tool-emoji" aria-hidden="true">🗄️</span>
+          <p class="tool-name">MySQL</p>
+          <p class="tool-desc">Gestión de bases de datos relacionales</p>
+        </article>
+        <article class="glass-card tool-card">
+          <span class="tool-emoji" aria-hidden="true">🔀</span>
+          <p class="tool-name">Git</p>
+          <p class="tool-desc">Control de versiones en proyectos</p>
+        </article>
+        <article class="glass-card tool-card">
+          <span class="tool-emoji" aria-hidden="true">🎨</span>
+          <p class="tool-name">Canva</p>
+          <p class="tool-desc">Diseño gráfico y presentaciones</p>
+        </article>
+        <article class="glass-card tool-card">
+          <span class="tool-emoji" aria-hidden="true">📊</span>
+          <p class="tool-name">Microsoft Office</p>
+          <p class="tool-desc">Word, Excel y PowerPoint avanzado</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Idiomas -->
+    <section id="idiomas" class="hab-section container">
+      <h2 class="section-title">Idiomas</h2>
+      <div class="lang-row">
+        <article class="glass-card lang-card">
+          <span class="lang-flag" aria-hidden="true">🇵🇪</span>
+          <h3 class="lang-name">Español</h3>
+          <p class="lang-level">Nativo</p>
+          <p class="lang-stars" aria-label="5 de 5 estrellas">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </p>
+          <p class="lang-desc">Lengua materna, dominio completo oral y escrito.</p>
+        </article>
+        <article class="glass-card lang-card">
+          <span class="lang-flag" aria-hidden="true">🇺🇸</span>
+          <h3 class="lang-name">Inglés</h3>
+          <p class="lang-level">Básico A2</p>
+          <p class="lang-stars" aria-label="2 de 5 estrellas">
+            <span class="star">★</span><span class="star">★</span><span class="star empty">★</span><span class="star empty">★</span><span class="star empty">★</span>
+          </p>
+          <p class="lang-desc">Comprensión lectora, vocabulario técnico en desarrollo.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="sobre-mi.html">🙋 Sobre Mí</a>
+        <a href="formacion.html">🎓 Formación</a>
+        <a href="cursos.html">📚 Cursos</a>
+        <a href="certificados.html">🏆 Certificados</a>
+        <a href="proyectos.html">💻 Proyectos</a>
+        <a href="eventos.html">🎉 Eventos</a>
+        <a href="viajes-metas.html">✈️ Metas</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      /* Mandalas */
+      var box = document.getElementById('mandalas-container');
+      if (box) {
+        for (var i = 0; i < 6; i++) {
+          var m = document.createElement('div');
+          m.className = 'mandala';
+          var size = Math.floor(Math.random() * 151) + 150;
+          var dur = (Math.random() * 15 + 15).toFixed(1);
+          m.style.width = size + 'px';
+          m.style.height = size + 'px';
+          m.style.left = Math.random() * 85 + '%';
+          m.style.top = Math.random() * 85 + '%';
+          m.style.animationDuration = dur + 's';
+          m.style.animationDirection = i % 2 === 0 ? 'normal' : 'reverse';
+          box.appendChild(m);
+        }
+      }
+
+      /* Barras técnicas — IntersectionObserver */
+      var barObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var wrap = entry.target;
+            var pct = wrap.dataset.pct;
+            var fill = wrap.querySelector('.skill-bar-fill');
+            if (fill && pct) {
+              requestAnimationFrame(function () {
+                fill.style.width = pct + '%';
+              });
+            }
+            barObserver.unobserve(wrap);
+          });
+        },
+        { threshold: 0.35, rootMargin: '0px 0px -20px 0px' }
+      );
+
+      document.querySelectorAll('.skill-bar-wrap').forEach(function (el) {
+        barObserver.observe(el);
+      });
+
+      /* Círculos blandas — --pct con IntersectionObserver */
+      var circleObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var card = entry.target;
+            var circle = card.querySelector('.circle-skill');
+            var pct = card.dataset.pct;
+            if (circle && pct) {
+              requestAnimationFrame(function () {
+                circle.style.setProperty('--pct', pct + '%');
+              });
+            }
+            circleObserver.unobserve(card);
+          });
+        },
+        { threshold: 0.3, rootMargin: '0px 0px -20px 0px' }
+      );
+
+      document.querySelectorAll('.soft-card').forEach(function (el) {
+        circleObserver.observe(el);
+      });
+
+      /* Fallback @property para navegadores sin soporte */
+      if (!CSS.supports('background', 'conic-gradient(red, blue)')) {
+        document.querySelectorAll('.soft-card').forEach(function (card) {
+          var pct = parseInt(card.dataset.pct, 10);
+          var circle = card.querySelector('.circle-skill');
+          if (circle) circle.style.background = 'rgba(255,110,180,0.3)';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

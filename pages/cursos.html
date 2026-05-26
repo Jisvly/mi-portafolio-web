@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mis Cursos — Angela Raquel Canteño Córdova, Ingeniería de Sistemas UNHEVAL, VII Ciclo 2026-I.">
+  <title>Cursos | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    #bubbles-container {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .page-cursos { padding-bottom: 100px; }
+
+    .hero-cursos {
+      text-align: center;
+      padding: 100px 24px 40px;
+      background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(180, 90, 40, 0.28), transparent 55%),
+                  radial-gradient(ellipse 60% 50% at 75% 25%, rgba(26, 26, 78, 0.45), transparent 50%),
+                  radial-gradient(ellipse 50% 40% at 15% 35%, rgba(120, 50, 30, 0.15), transparent 45%);
+    }
+
+    .hero-cursos h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .hero-cursos p {
+      max-width: 580px;
+      margin: 0 auto;
+      color: var(--texto-suave);
+    }
+
+    /* Acordeón cursos */
+    .accordion-cursos {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .accordion-cursos .accordion-item {
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .accordion-cursos .accordion-header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-weight: 600;
+      transition: var(--transition);
+      width: 100%;
+      border: none;
+      color: var(--texto);
+      text-align: left;
+    }
+
+    .accordion-cursos .accordion-header:hover,
+    .accordion-cursos .accordion-item.active .accordion-header {
+      border-color: var(--rosa);
+      background: rgba(255, 110, 180, 0.08);
+    }
+
+    .accordion-cursos .acc-emoji {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .accordion-cursos .acc-title {
+      flex: 1;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(0.8rem, 2.5vw, 0.95rem);
+      color: var(--texto);
+      word-break: break-word;
+      min-width: 0;
+    }
+
+    .accordion-cursos .acc-arrow {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 1.25rem;
+      color: var(--cian);
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-cursos .accordion-item.active .acc-arrow {
+      transform: rotate(90deg);
+    }
+
+    .accordion-cursos .accordion-body {
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .curso-inner {
+      padding: 20px 24px 24px;
+      margin: 0 12px 12px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .badge-area {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .badge-tecnologia {
+      background: rgba(0, 229, 255, 0.15);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      color: var(--cian);
+    }
+
+    .badge-matematica {
+      background: rgba(155, 89, 182, 0.2);
+      border: 1px solid rgba(155, 89, 182, 0.45);
+      color: #c8a0e8;
+    }
+
+    .badge-redes {
+      background: rgba(255, 110, 180, 0.15);
+      border: 1px solid rgba(255, 110, 180, 0.4);
+      color: var(--rosa);
+    }
+
+    .badge-procesos {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      color: #e8c96a;
+    }
+
+    .curso-desc {
+      margin-bottom: 18px;
+      line-height: 1.65;
+      color: var(--texto-suave);
+    }
+
+    .curso-block-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--rosa);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .chip-glass {
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      line-height: 1.3;
+    }
+
+    .trabajo-destacado {
+      padding: 14px 16px;
+      background: rgba(255, 110, 180, 0.06);
+      border-left: 3px solid var(--rosa);
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 18px;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .curso-img {
+      width: 100%;
+      border-radius: 12px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid var(--glass-border);
+      display: block;
+    }
+
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.1);
+    }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 480px) {
+      .accordion-cursos .accordion-header {
+        padding: 14px 16px;
+        gap: 10px;
+      }
+      .curso-inner {
+        padding: 16px;
+        margin: 0 8px 8px;
+      }
+      .hero-cursos { padding-top: 88px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bubbles-container" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="formacion.html">Formación</a></li>
+        <li><a href="cursos.html" class="active">Cursos</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="habilidades.html">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-cursos">
+    <section class="hero-cursos">
+      <div class="container">
+        <h1>Mis Cursos</h1>
+        <p>Asignaturas de mi carrera universitaria — VII Ciclo 2026-I</p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="accordion accordion-cursos" id="accordion-cursos">
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🏗️</span>
+            <span class="acc-title">Arquitectura de Tecnologías de Información</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-tecnologia">Tecnología</span>
+              <p class="curso-desc">
+                Estudio de arquitecturas empresariales, patrones de diseño y alineación entre negocio y TI.
+                Se analizan frameworks como TOGAF y la planificación de infraestructura escalable.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Diseño de arquitectura</span>
+                <span class="chip-glass">Análisis de requisitos</span>
+                <span class="chip-glass">Documentación técnica</span>
+                <span class="chip-glass">Visión estratégica TI</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">Enterprise Architect</span>
+                <span class="chip-glass">UML</span>
+                <span class="chip-glass">Draw.io</span>
+                <span class="chip-glass">Visio</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Diagrama de arquitectura para un sistema de gestión universitaria, definiendo capas,
+                servicios y flujos de datos entre módulos académicos y administrativos.
+              </p>
+              <img class="curso-img" src="../assets/img/curso1.jpg" alt="Arquitectura de TI">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🖥️</span>
+            <span class="acc-title">Administración de Servidores</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-tecnologia">Tecnología</span>
+              <p class="curso-desc">
+                Configuración, administración y mantenimiento de servidores Linux y Windows en entornos
+                de producción y laboratorio. Incluye virtualización, servicios y monitoreo básico.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Administración de SO</span>
+                <span class="chip-glass">Shell scripting</span>
+                <span class="chip-glass">Gestión de usuarios</span>
+                <span class="chip-glass">Resolución de incidencias</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">Linux Ubuntu</span>
+                <span class="chip-glass">Windows Server</span>
+                <span class="chip-glass">VMware</span>
+                <span class="chip-glass">Docker</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Despliegue de un servidor web con Apache, configuración de permisos, firewall básico
+                y documentación del procedimiento de instalación para el equipo.
+              </p>
+              <img class="curso-img" src="../assets/img/curso2.jpg" alt="Administración de Servidores">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🌐</span>
+            <span class="acc-title">Redes y Telecomunicaciones</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-redes">Redes</span>
+              <p class="curso-desc">
+                Fundamentos de redes LAN/WAN, protocolos TCP/IP, subnetting, routing y switching.
+                Prácticas con equipos Cisco y simuladores para diseño de topologías.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Diseño de topologías</span>
+                <span class="chip-glass">Configuración de routers</span>
+                <span class="chip-glass">Subnetting</span>
+                <span class="chip-glass">Troubleshooting de red</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">Cisco Packet Tracer</span>
+                <span class="chip-glass">Wireshark</span>
+                <span class="chip-glass">IPv4 / IPv6</span>
+                <span class="chip-glass">VLANs</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Simulación de red empresarial con tres VLANs, ACLs y enrutamiento inter-VLAN
+                documentado en informe técnico con diagramas y pruebas de conectividad.
+              </p>
+              <img class="curso-img" src="../assets/img/curso3.jpg" alt="Redes y Telecomunicaciones">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">🗄️</span>
+            <span class="acc-title">Base de Datos</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-tecnologia">Tecnología</span>
+              <p class="curso-desc">
+                Modelado relacional, normalización, consultas SQL avanzadas y administración de
+                motores de bases de datos. Integración con aplicaciones backend.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Modelado ER</span>
+                <span class="chip-glass">SQL avanzado</span>
+                <span class="chip-glass">Optimización de consultas</span>
+                <span class="chip-glass">Integridad de datos</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">MySQL</span>
+                <span class="chip-glass">PostgreSQL</span>
+                <span class="chip-glass">phpMyAdmin</span>
+                <span class="chip-glass">DBeaver</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Base de datos para sistema de biblioteca con 12 tablas normalizadas, triggers,
+                procedimientos almacenados y reportes de préstamos por periodo académico.
+              </p>
+              <img class="curso-img" src="../assets/img/curso4.jpg" alt="Base de Datos">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">💻</span>
+            <span class="acc-title">Programación Web</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-tecnologia">Tecnología</span>
+              <p class="curso-desc">
+                Desarrollo de aplicaciones web full stack: HTML semántico, CSS responsive, JavaScript
+                y conexión con APIs. Buenas prácticas de UX y accesibilidad básica.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Frontend responsive</span>
+                <span class="chip-glass">Consumo de APIs</span>
+                <span class="chip-glass">Validación de formularios</span>
+                <span class="chip-glass">Git / control de versiones</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">HTML5 / CSS3</span>
+                <span class="chip-glass">JavaScript</span>
+                <span class="chip-glass">PHP</span>
+                <span class="chip-glass">VS Code</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Panel administrativo web con CRUD de usuarios, autenticación por sesión y diseño
+                glassmorphism responsive — base de este portafolio personal.
+              </p>
+              <img class="curso-img" src="../assets/img/curso5.jpg" alt="Programación Web">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">⚙️</span>
+            <span class="acc-title">Ingeniería de Procesos</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-procesos">Procesos</span>
+              <p class="curso-desc">
+                Análisis, modelado y mejora de procesos de negocio con notación BPMN.
+                Identificación de cuellos de botella y propuestas de optimización en organizaciones.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Mapeo de procesos</span>
+                <span class="chip-glass">Análisis BPMN</span>
+                <span class="chip-glass">Mejora continua</span>
+                <span class="chip-glass">Indicadores KPI</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">Bizagi</span>
+                <span class="chip-glass">Lucidchart</span>
+                <span class="chip-glass">Excel</span>
+                <span class="chip-glass">BPMN 2.0</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Rediseño del proceso de matrícula universitaria simulada: diagrama AS-IS y TO-BE
+                con reducción estimada de tiempos de atención del 30%.
+              </p>
+              <img class="curso-img" src="../assets/img/curso6.jpg" alt="Ingeniería de Procesos">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">∫</span>
+            <span class="acc-title">Cálculo Integral</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-matematica">Matemática</span>
+              <p class="curso-desc">
+                Integrales definidas e indefinidas, técnicas de integración, aplicaciones en áreas,
+                volúmenes y problemas de modelado en ingeniería y ciencias.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Razonamiento analítico</span>
+                <span class="chip-glass">Resolución de problemas</span>
+                <span class="chip-glass">Modelado matemático</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">GeoGebra</span>
+                <span class="chip-glass">Wolfram Alpha</span>
+                <span class="chip-glass">LaTeX</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Proyecto de aplicación de integrales al cálculo de consumo energético en un sistema
+                con variación continua, presentado con gráficos y análisis interpretativo.
+              </p>
+              <img class="curso-img" src="../assets/img/curso7.jpg" alt="Cálculo Integral">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">⚛️</span>
+            <span class="acc-title">Física Moderna</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-matematica">Matemática</span>
+              <p class="curso-desc">
+                Introducción a la relatividad especial, física cuántica básica y fenómenos modernos.
+                Conexión entre teoría física y aplicaciones en tecnología contemporánea.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Pensamiento científico</span>
+                <span class="chip-glass">Interpretación de modelos</span>
+                <span class="chip-glass">Análisis experimental</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">Simuladores PhET</span>
+                <span class="chip-glass">Python (NumPy)</span>
+                <span class="chip-glass">Laboratorio virtual</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Informe sobre el efecto fotoeléctrico con experimento simulado, gráficas de energía
+                vs. frecuencia y conclusiones vinculadas a aplicaciones en sensores y energía solar.
+              </p>
+              <img class="curso-img" src="../assets/img/curso8.jpg" alt="Física Moderna">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">📊</span>
+            <span class="acc-title">Formulación y Evaluación de Proyectos</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-procesos">Procesos</span>
+              <p class="curso-desc">
+                Ciclo de vida de proyectos, estudios de factibilidad, presupuestos, cronogramas
+                y evaluación económica (VAN, TIR, payback) para iniciativas tecnológicas.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Planificación de proyectos</span>
+                <span class="chip-glass">Análisis financiero</span>
+                <span class="chip-glass">Gestión de riesgos</span>
+                <span class="chip-glass">Elaboración de informes</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">MS Project</span>
+                <span class="chip-glass">Excel financiero</span>
+                <span class="chip-glass">Diagrama de Gantt</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Plan de factibilidad para una app móvil de delivery local: estudio de mercado,
+                costos, cronograma de 6 meses y evaluación VAN/TIR con escenario optimista y pesimista.
+              </p>
+              <img class="curso-img" src="../assets/img/curso9.jpg" alt="Formulación y Evaluación de Proyectos">
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button type="button" class="accordion-header">
+            <span class="acc-emoji">📐</span>
+            <span class="acc-title">Ecuaciones Diferenciales</span>
+            <span class="acc-arrow">›</span>
+          </button>
+          <div class="accordion-body">
+            <div class="curso-inner glass-card">
+              <span class="badge-area badge-matematica">Matemática</span>
+              <p class="curso-desc">
+                Ecuaciones diferenciales ordinarias y en derivadas parciales, métodos de solución
+                y aplicaciones en modelado de sistemas dinámicos en ingeniería.
+              </p>
+              <p class="curso-block-title">Competencias que desarrolla</p>
+              <div class="chips-row">
+                <span class="chip-glass">Modelado dinámico</span>
+                <span class="chip-glass">Métodos analíticos</span>
+                <span class="chip-glass">Interpretación de soluciones</span>
+              </div>
+              <p class="curso-block-title">Herramientas y tecnologías</p>
+              <div class="chips-row">
+                <span class="chip-glass">MATLAB</span>
+                <span class="chip-glass">GeoGebra</span>
+                <span class="chip-glass">Python (SciPy)</span>
+              </div>
+              <p class="curso-block-title">Trabajo destacado</p>
+              <p class="trabajo-destacado">
+                Modelo de crecimiento poblacional y enfriamiento de Newton con solución analítica
+                y comparación gráfica con datos simulados en MATLAB.
+              </p>
+              <img class="curso-img" src="../assets/img/curso10.jpg" alt="Ecuaciones Diferenciales">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="sobre-mi.html">🙋 Sobre Mí</a>
+        <a href="formacion.html">🎓 Formación</a>
+        <a href="certificados.html">🏆 Certificados</a>
+        <a href="proyectos.html">💻 Proyectos</a>
+        <a href="habilidades.html">🛠️ Habilidades</a>
+        <a href="eventos.html">🎉 Eventos</a>
+        <a href="viajes-metas.html">✈️ Metas</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      document.querySelectorAll('.accordion-cursos .accordion-item.active .accordion-body').forEach(function (body) {
+        body.style.maxHeight = body.scrollHeight + 'px';
+      });
+    });
+  </script>
+</body>
+</html>

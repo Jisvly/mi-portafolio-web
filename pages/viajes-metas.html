@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Metas y Sueños — Angela Raquel Canteño Córdova, viajes y visión de futuro.">
+  <title>Metas y Sueños | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    :root {
+      --dorado: #ffd700;
+      --verde-visita: #00c87a;
+    }
+
+    #stars-bg,
+    #clouds-container {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    #clouds-container { z-index: -1; }
+    #stars-bg { z-index: -2; }
+
+    .star-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle ease-in-out infinite;
+      opacity: 0.6;
+    }
+
+    .page-metas { padding-bottom: 100px; }
+
+    .hero-metas {
+      text-align: center;
+      padding: 100px 24px 40px;
+      background: radial-gradient(ellipse 75% 55% at 50% 0%, rgba(80, 160, 220, 0.28), transparent 55%),
+                  radial-gradient(ellipse 55% 50% at 70% 40%, rgba(40, 120, 80, 0.2), transparent 50%);
+    }
+
+    .hero-metas h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .hero-metas p { color: var(--texto-suave); max-width: 560px; margin: 0 auto; }
+
+    .meta-block { margin-bottom: 56px; }
+
+    .meta-block .section-title {
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .meta-block .section-title::after {
+      left: 0;
+      transform: none;
+    }
+
+    .intro-text {
+      max-width: 720px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+      color: var(--texto-suave);
+    }
+
+    /* Destinos */
+    .destinos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .destino-card {
+      padding: 18px;
+      cursor: pointer;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .destino-card:hover {
+      border-color: rgba(255, 110, 180, 0.35);
+    }
+
+    .destino-card.visitado {
+      border-color: var(--verde-visita);
+      background: rgba(0, 200, 122, 0.08);
+    }
+
+    .destino-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .custom-checkbox {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--rosa);
+      background: var(--glass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: var(--transition);
+      cursor: pointer;
+      margin-top: 2px;
+    }
+
+    .custom-checkbox.checked {
+      background: var(--rosa);
+      border-color: var(--rosa);
+    }
+
+    .custom-checkbox.checked::after {
+      content: '✓';
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .destino-info { flex: 1; min-width: 0; }
+
+    .destino-flag { font-size: 1.5rem; margin-bottom: 4px; display: block; }
+
+    .destino-nombre {
+      font-weight: 700;
+      color: var(--texto);
+      font-size: 0.95rem;
+      line-height: 1.3;
+    }
+
+    .destino-pais {
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+    }
+
+    .destino-card.visitado .destino-nombre {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .badge-visitado {
+      display: none;
+      font-size: 0.75rem;
+      color: var(--verde-visita);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .destino-card.visitado .badge-visitado { display: inline-block; }
+
+    .destino-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding-top: 0;
+    }
+
+    .destino-card.open .destino-body {
+      max-height: 600px;
+      padding-top: 16px;
+    }
+
+    .destino-body img {
+      width: 100%;
+      border-radius: 10px;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      margin: 12px 0;
+      border: 1px solid var(--glass-border);
+    }
+
+    .destino-list {
+      list-style: none;
+      margin: 10px 0;
+    }
+
+    .destino-list li {
+      margin-bottom: 6px;
+      font-size: 0.88rem;
+      color: var(--texto-suave);
+    }
+
+    /* Metas expandibles */
+    .metas-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .metas-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .meta-goal-card {
+      overflow: hidden;
+      border-radius: var(--radius);
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+    }
+
+    .meta-goal-header {
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .meta-goal-header:hover {
+      background: rgba(255, 110, 180, 0.06);
+    }
+
+    .meta-goal-header h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.9rem;
+      color: var(--texto);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-goal-header .m-emoji { font-size: 1.25rem; }
+
+    .meta-pct-label {
+      font-size: 0.75rem;
+      color: var(--rosa);
+      font-weight: 600;
+    }
+
+    .progress-mini {
+      height: 4px;
+      border-radius: 50px;
+      background: var(--glass);
+      margin-top: 8px;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .progress-mini-fill {
+      height: 100%;
+      border-radius: 50px;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      width: 0;
+      transition: width 1s ease;
+    }
+
+    .meta-goal-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding: 0 20px;
+    }
+
+    .meta-goal-card.open .meta-goal-body {
+      max-height: 1200px;
+      padding: 0 20px 20px;
+    }
+
+    .meta-goal-body ol {
+      margin: 12px 0 12px 20px;
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+    }
+
+    .meta-goal-body ol li { margin-bottom: 6px; }
+
+    .meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .meta-chip {
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      border-radius: 50px;
+      background: rgba(0, 229, 255, 0.1);
+      border: 1px solid rgba(0, 229, 255, 0.25);
+      color: var(--cian);
+    }
+
+    .meta-quote {
+      font-style: italic;
+      color: var(--rosa);
+      margin-top: 14px;
+      padding-left: 12px;
+      border-left: 3px solid var(--rosa);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .meta-fecha {
+      font-size: 0.8rem;
+      color: var(--cian);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* Visión */
+    @keyframes rainbowShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .vision-section {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 70vh;
+      padding: 80px 24px;
+      margin: 0 -24px;
+      width: calc(100% + 48px);
+      max-width: 100vw;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .vision-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .vision-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5, 5, 16, 0.75), rgba(26, 26, 78, 0.85));
+      z-index: 1;
+    }
+
+    .vision-fallback {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a0a2e, #1a1a4e, #4a1942, #0a0a2e);
+      background-size: 300% 300%;
+      animation: rainbowShift 18s ease infinite;
+      z-index: 0;
+      display: none;
+    }
+
+    .vision-section.no-img .vision-fallback { display: block; }
+    .vision-section.no-img .vision-bg { display: none; }
+
+    .vision-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .vision-quote-mark {
+      font-size: clamp(4rem, 12vw, 8rem);
+      line-height: 0.5;
+      color: var(--rosa);
+      opacity: 0.25;
+      font-family: Georgia, serif;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .vision-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.1rem, 3.5vw, 2.2rem);
+      color: var(--texto);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .vision-firma {
+      font-style: italic;
+      color: var(--cian);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .vision-year {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--dorado);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    .vision-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .vision-chip {
+      padding: 12px 22px;
+      font-size: 0.9rem;
+      border-radius: 50px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-border);
+      color: var(--texto);
+    }
+
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover { border-color: var(--rosa); color: var(--texto); }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .destinos-grid { grid-template-columns: repeat(2, 1fr); }
+      .metas-grid-3 { grid-template-columns: 1fr; }
+      .vision-section {
+        width: 100%;
+        left: 0;
+        transform: none;
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .destinos-grid,
+      .metas-grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .hero-metas { padding-top: 88px; }
+      .vision-section { min-height: 60vh; padding: 60px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="stars-bg" aria-hidden="true"></div>
+  <div id="clouds-container" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="formacion.html">Formación</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="habilidades.html">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html" class="active">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-metas">
+    <section class="hero-metas">
+      <div class="container">
+        <h1>Metas y Sueños</h1>
+        <p>Mis aspiraciones, viajes y visión de futuro</p>
+      </div>
+    </section>
+
+    <!-- Bucket list -->
+    <section class="meta-block container" id="viajes">
+      <h2 class="section-title">✈️ Mi Bucket List de Viajes</h2>
+      <p class="intro-text">
+        Viajar es una de mis grandes pasiones. Cada destino representa una oportunidad de conocer culturas,
+        ampliar horizontes y crear recuerdos que inspiran mi crecimiento personal y profesional.
+      </p>
+      <div class="destinos-grid" id="destinos-grid">
+
+        <article class="glass-card destino-card" data-id="machu" data-storage="machu">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇵🇪</span>
+              <div class="destino-nombre">Machu Picchu</div>
+              <div class="destino-pais">Perú</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Maravilla del mundo que simboliza la historia y grandeza del Imperio Inca.</p>
+            <p><strong>Mejor época:</strong> Mayo – septiembre (temporada seca)</p>
+            <ul class="destino-list">
+              <li>📌 Caminar el Camino Inca o ruta alternativa</li>
+              <li>📌 Ver el amanecer en la ciudadela</li>
+              <li>📌 Conocer la gastronomía cusqueña</li>
+            </ul>
+            <img src="../assets/img/destino1.jpg" alt="Machu Picchu" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="cusco" data-storage="cusco">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇵🇪</span>
+              <div class="destino-nombre">Cusco</div>
+              <div class="destino-pais">Perú</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Ciudad histórica con arquitectura colonial e inca, puerta de entrada a Machu Picchu.</p>
+            <p><strong>Mejor época:</strong> Junio – agosto</p>
+            <ul class="destino-list">
+              <li>📌 Recorrer la Plaza de Armas y Sacsayhuamán</li>
+              <li>📌 Probar el cuy y el chicha de jora</li>
+              <li>📌 Comprar artesanías locales</li>
+            </ul>
+            <img src="../assets/img/destino2.jpg" alt="Cusco" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="lima" data-storage="lima">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇵🇪</span>
+              <div class="destino-nombre">Lima</div>
+              <div class="destino-pais">Perú</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Capital gastronómica de América Latina, mezcla de historia, mar y modernidad.</p>
+            <p><strong>Mejor época:</strong> Diciembre – marzo</p>
+            <ul class="destino-list">
+              <li>📌 Tour gastronómico en Miraflores</li>
+              <li>📌 Visitar el Centro Histórico</li>
+              <li>📌 Caminar por el malecón al atardecer</li>
+            </ul>
+            <img src="../assets/img/destino3.jpg" alt="Lima" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="tokio" data-storage="tokio">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇯🇵</span>
+              <div class="destino-nombre">Tokio</div>
+              <div class="destino-pais">Japón</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Fusión única de tradición milenaria y tecnología de vanguardia.</p>
+            <p><strong>Mejor época:</strong> Marzo – abril (sakura) u octubre – noviembre</p>
+            <ul class="destino-list">
+              <li>📌 Explorar Shibuya y Akihabara</li>
+              <li>📌 Visitar templos en Asakusa</li>
+              <li>📌 Probar sushi auténtico</li>
+            </ul>
+            <img src="../assets/img/destino4.jpg" alt="Tokio" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="madrid" data-storage="madrid">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇪🇸</span>
+              <div class="destino-nombre">Madrid</div>
+              <div class="destino-pais">España</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Capital vibrante con museos de clase mundial y vida cultural intensa.</p>
+            <p><strong>Mejor época:</strong> Primavera u otoño</p>
+            <ul class="destino-list">
+              <li>📌 Museo del Prado y Parque del Retiro</li>
+              <li>📌 Tapeo por La Latina</li>
+              <li>📌 Partido de fútbol en el Bernabéu</li>
+            </ul>
+            <img src="../assets/img/destino5.jpg" alt="Madrid" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="paris" data-storage="paris">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇫🇷</span>
+              <div class="destino-nombre">París</div>
+              <div class="destino-pais">Francia</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>La ciudad del amor, el arte y la luz — un sueño desde la infancia.</p>
+            <p><strong>Mejor época:</strong> Abril – junio o septiembre</p>
+            <ul class="destino-list">
+              <li>📌 Torre Eiffel y Museo del Louvre</li>
+              <li>📌 Paseo por Montmartre</li>
+              <li>📌 Croissant en un café parisino</li>
+            </ul>
+            <img src="../assets/img/destino6.jpg" alt="París" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="ny" data-storage="ny">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇺🇸</span>
+              <div class="destino-nombre">Nueva York</div>
+              <div class="destino-pais">USA</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>La ciudad que nunca duerme — epicentro de negocios, cultura y tecnología.</p>
+            <p><strong>Mejor época:</strong> Abril – junio o septiembre – octubre</p>
+            <ul class="destino-list">
+              <li>📌 Times Square y Central Park</li>
+              <li>📌 Estatua de la Libertad</li>
+              <li>📌 Broadway y museos</li>
+            </ul>
+            <img src="../assets/img/destino7.jpg" alt="Nueva York" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="toronto" data-storage="toronto">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇨🇦</span>
+              <div class="destino-nombre">Toronto</div>
+              <div class="destino-pais">Canadá</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Ciudad multicultural y hub tecnológico en América del Norte.</p>
+            <p><strong>Mejor época:</strong> Junio – septiembre</p>
+            <ul class="destino-list">
+              <li>📌 CN Tower y vistas panorámicas</li>
+              <li>📌 Islas de Toronto</li>
+              <li>📌 Conocer su escena tech</li>
+            </ul>
+            <img src="../assets/img/destino8.jpg" alt="Toronto" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="rio" data-storage="rio">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇧🇷</span>
+              <div class="destino-nombre">Río de Janeiro</div>
+              <div class="destino-pais">Brasil</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Ciudad de playas icónicas, samba y el Cristo Redentor.</p>
+            <p><strong>Mejor época:</strong> Diciembre – marzo</p>
+            <ul class="destino-list">
+              <li>📌 Copacabana e Ipanema</li>
+              <li>📌 Cristo Redentor y Pan de Azúcar</li>
+              <li>📌 Carnaval (si coincide la fecha)</li>
+            </ul>
+            <img src="../assets/img/destino9.jpg" alt="Río de Janeiro" loading="lazy">
+          </div>
+        </article>
+
+        <article class="glass-card destino-card" data-id="sydney" data-storage="sydney">
+          <div class="destino-head">
+            <span class="custom-checkbox" role="checkbox" aria-checked="false" tabindex="0"></span>
+            <div class="destino-info">
+              <span class="destino-flag">🇦🇺</span>
+              <div class="destino-nombre">Sídney</div>
+              <div class="destino-pais">Australia</div>
+              <span class="badge-visitado">¡Visitado! ✓</span>
+            </div>
+          </div>
+          <div class="destino-body">
+            <p>Harbor city con arquitectura icónica y naturaleza espectacular cercana.</p>
+            <p><strong>Mejor época:</strong> Septiembre – noviembre o marzo – mayo</p>
+            <ul class="destino-list">
+              <li>📌 Opera House y Harbor Bridge</li>
+              <li>📌 Bondi Beach</li>
+              <li>📌 Excursión a Blue Mountains</li>
+            </ul>
+            <img src="../assets/img/destino10.jpg" alt="Sídney" loading="lazy">
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Profesionales -->
+    <section class="meta-block container" id="profesionales">
+      <h2 class="section-title">💼 Metas Profesionales</h2>
+      <div class="metas-grid-3">
+
+        <article class="meta-goal-card" data-pct="25">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">🔐</span> Especializarme en Ciberseguridad</h3>
+            <span class="meta-pct-label">25% de avance</span>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:25%"></div></div>
+          </div>
+          <div class="meta-goal-body">
+            <p class="meta-fecha">Objetivo: 2028</p>
+            <p>Convertirme en profesional capaz de proteger sistemas, datos y personas frente a amenazas digitales crecientes.</p>
+            <ol>
+              <li>Obtener certificación CCNA (fundamentos de redes)</li>
+              <li>Certificar CompTIA Security+</li>
+              <li>Estudiar ethical hacking y laboratorios prácticos</li>
+            </ol>
+            <div class="meta-chips">
+              <span class="meta-chip">Cisco NetAcad</span>
+              <span class="meta-chip">TryHackMe</span>
+              <span class="meta-chip">Cursos especializados</span>
+            </div>
+            <p class="meta-quote">«La seguridad no es un producto, es un proceso.» — Bruce Schneier</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card" data-pct="20">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">🏅</span> Certificaciones Internacionales</h3>
+            <span class="meta-pct-label">20% de avance</span>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:20%"></div></div>
+          </div>
+          <div class="meta-goal-body">
+            <p class="meta-fecha">Objetivo: 2027</p>
+            <p>Validar mis competencias con certificaciones reconocidas globalmente para acceder a mejores oportunidades laborales.</p>
+            <ol>
+              <li>CCNA Cisco</li>
+              <li>CompTIA A+</li>
+              <li>AWS Cloud Practitioner</li>
+            </ol>
+            <div class="meta-chips">
+              <span class="meta-chip">Cisco</span>
+              <span class="meta-chip">CompTIA</span>
+              <span class="meta-chip">AWS Training</span>
+            </div>
+            <p class="meta-quote">«Invertir en conocimiento produce los mejores intereses.» — Benjamin Franklin</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card" data-pct="30">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">💡</span> Soluciones Tecnológicas Innovadoras</h3>
+            <span class="meta-pct-label">30% de avance</span>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:30%"></div></div>
+          </div>
+          <div class="meta-goal-body">
+            <p class="meta-fecha">Objetivo: 2027</p>
+            <p>Desarrollar proyectos que combinen IoT, software y emprendimiento para resolver problemas reales de mi comunidad.</p>
+            <ol>
+              <li>Completar proyectos IoT (domótica, bolsa inteligente)</li>
+              <li>Publicar apps o prototipos en GitHub</li>
+              <li>Explorar modelo de startup tech</li>
+            </ol>
+            <div class="meta-chips">
+              <span class="meta-chip">Arduino / ESP32</span>
+              <span class="meta-chip">GitHub</span>
+              <span class="meta-chip">Incubadora UNHEVAL</span>
+            </div>
+            <p class="meta-quote">«La innovación distingue a los líderes de los seguidores.» — Steve Jobs</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Académicas -->
+    <section class="meta-block container" id="academicas">
+      <h2 class="section-title">🎓 Metas Académicas</h2>
+      <div class="metas-grid-3">
+
+        <article class="meta-goal-card" data-pct="70">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">🎓</span> Titularme como Ing. de Sistemas</h3>
+            <span class="meta-pct-label">70% de avance</span>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:70%"></div></div>
+          </div>
+          <div class="meta-goal-body">
+            <p class="meta-fecha">Objetivo: 2027</p>
+            <p>Culminar mi carrera en UNHEVAL con excelencia, proyecto de tesis sólido y sustentación exitosa.</p>
+            <ol>
+              <li>Completar VII ciclo y cursos restantes</li>
+              <li>Elaborar y aprobar tesis</li>
+              <li>Sustentar ante jurado universitario</li>
+            </ol>
+            <p class="meta-quote">«El éxito es la suma de pequeños esfuerzos repetidos.»</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card" data-pct="15">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">🌍</span> Intercambio Académico Internacional</h3>
+            <span class="meta-pct-label">15% de avance</span>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:15%"></div></div>
+          </div>
+          <div class="meta-goal-body">
+            <p class="meta-fecha">Objetivo: 2026 – 2027</p>
+            <p>Vivir una experiencia de intercambio para fortalecer idiomas, red internacional y perspectiva global.</p>
+            <ol>
+              <li>Mejorar inglés a nivel intermedio-alto</li>
+              <li>Investigar programas y becas</li>
+              <li>Postular a convocatorias</li>
+            </ol>
+            <p class="meta-quote">«El mundo es un libro y quien no viaja solo lee una página.»</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card" data-pct="10">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">📚</span> Posgrado en Ciberseguridad</h3>
+            <span class="meta-pct-label">10% de avance</span>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:10%"></div></div>
+          </div>
+          <div class="meta-goal-body">
+            <p class="meta-fecha">Objetivo: 2029</p>
+            <p>Continuar formación con maestría especializada después de titularme y acumular experiencia.</p>
+            <ol>
+              <li>Graduarme como ingeniera</li>
+              <li>Ahorrar e investigar universidades</li>
+              <li>Postular a maestría en ciberseguridad</li>
+            </ol>
+            <p class="meta-quote">«Aprender es un tesoro que seguirá contigo a todas partes.»</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Personales -->
+    <section class="meta-block container" id="personales">
+      <h2 class="section-title">🌟 Metas Personales</h2>
+      <div class="metas-grid-2">
+
+        <article class="meta-goal-card">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">✈️</span> Viajar por el mundo</h3>
+          </div>
+          <div class="meta-goal-body">
+            <p>Conocer al menos 5 países antes de los 30 años, empezando por destinos en Perú y Latinoamérica, luego expandirme a Europa y Asia.</p>
+            <p><strong>Acciones:</strong> Ahorrar mensualmente, planificar viajes en vacaciones, aprender sobre culturas locales.</p>
+            <p class="meta-fecha">Meta: antes de los 30 años</p>
+            <p class="meta-quote">«Viajar es vivir dos veces.»</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">🗣️</span> Dominar el inglés</h3>
+          </div>
+          <div class="meta-goal-body">
+            <p>Alcanzar nivel B2 para comunicarme con fluidez en contextos académicos y profesionales internacionales.</p>
+            <p><strong>Acciones:</strong> Cursos en ICPNA, práctica diaria con apps, ver series en inglés, leer documentación técnica.</p>
+            <p class="meta-fecha">Meta: 2027</p>
+            <p class="meta-quote">«Un idioma diferente es una visión diferente de la vida.»</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">🧘</span> Crecer personalmente</h3>
+          </div>
+          <div class="meta-goal-body">
+            <p>Construir hábitos que fortalezcan mi bienestar físico y mental: lectura, ejercicio, meditación y desconexión digital consciente.</p>
+            <p><strong>Acciones:</strong> 20 min de lectura diaria, caminatas, journaling semanal.</p>
+            <p class="meta-fecha">Meta: hábito continuo</p>
+            <p class="meta-quote">«El cuerpo alcanza lo que la mente cree.»</p>
+          </div>
+        </article>
+
+        <article class="meta-goal-card">
+          <div class="meta-goal-header" role="button" tabindex="0">
+            <h3><span class="m-emoji">👨‍👩‍👧</span> Apoyar a mi familia</h3>
+          </div>
+          <div class="meta-goal-body">
+            <p>Ser fuente de orgullo e inspiración para mi familia, apoyarlos económica y emocionalmente con los frutos de mi esfuerzo.</p>
+            <p><strong>Acciones:</strong> Mantener comunicación cercana, compartir logros, incluirlos en mis metas.</p>
+            <p class="meta-fecha">Meta: siempre</p>
+            <p class="meta-quote">«El amor de familia es la base de todo.»</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Visión -->
+    <section class="vision-section" id="vision">
+      <img class="vision-bg" src="../assets/img/vision.jpg" alt="" aria-hidden="true">
+      <div class="vision-fallback" aria-hidden="true"></div>
+      <div class="vision-overlay" aria-hidden="true"></div>
+      <div class="vision-content">
+        <span class="vision-quote-mark">"</span>
+        <p class="vision-text">
+          Seré una ingeniera de sistemas que no solo escribe código, sino que construye soluciones que transforman vidas.
+          La tecnología es mi herramienta, el impacto social es mi propósito.
+        </p>
+        <p class="vision-firma">— Angela Raquel Canteño Córdova</p>
+        <span class="vision-year">2026</span>
+        <div class="vision-chips">
+          <span class="vision-chip">🔐 Ciberseguridad</span>
+          <span class="vision-chip">🌍 Impacto Global</span>
+          <span class="vision-chip">💡 Innovación</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="sobre-mi.html">🙋 Sobre Mí</a>
+        <a href="formacion.html">🎓 Formación</a>
+        <a href="cursos.html">📚 Cursos</a>
+        <a href="certificados.html">🏆 Certificados</a>
+        <a href="proyectos.html">💻 Proyectos</a>
+        <a href="habilidades.html">🛠️ Habilidades</a>
+        <a href="eventos.html">🎉 Eventos</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      var STORAGE_KEY = 'angela-destinos-visitados';
+
+      /* Estrellas */
+      var starsBg = document.getElementById('stars-bg');
+      if (starsBg) {
+        for (var i = 0; i < 80; i++) {
+          var s = document.createElement('div');
+          s.className = 'star-dot';
+          var size = Math.floor(Math.random() * 3) + 1;
+          s.style.width = size + 'px';
+          s.style.height = size + 'px';
+          s.style.left = Math.random() * 100 + '%';
+          s.style.top = Math.random() * 100 + '%';
+          s.style.animationDuration = (Math.random() * 3 + 2).toFixed(1) + 's';
+          s.style.animationDelay = (Math.random() * 4).toFixed(1) + 's';
+          starsBg.appendChild(s);
+        }
+      }
+
+      /* Visión imagen fallback */
+      var vision = document.getElementById('vision');
+      var visionImg = vision && vision.querySelector('.vision-bg');
+      if (visionImg) {
+        visionImg.addEventListener('error', function () {
+          vision.classList.add('no-img');
+        });
+      }
+
+      /* Destinos — localStorage + toggle */
+      function getVisited() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveVisited(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+      }
+
+      function setVisited(card, visited) {
+        var id = card.dataset.storage;
+        var list = getVisited();
+        if (visited && list.indexOf(id) === -1) list.push(id);
+        if (!visited) list = list.filter(function (x) { return x !== id; });
+        saveVisited(list);
+        card.classList.toggle('visitado', visited);
+        var cb = card.querySelector('.custom-checkbox');
+        cb.classList.toggle('checked', visited);
+        cb.setAttribute('aria-checked', visited);
+      }
+
+      document.querySelectorAll('.destino-card').forEach(function (card) {
+        var id = card.dataset.storage;
+        var cb = card.querySelector('.custom-checkbox');
+        var body = card.querySelector('.destino-body');
+
+        if (getVisited().indexOf(id) !== -1) setVisited(card, true);
+
+        cb.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var now = !cb.classList.contains('checked');
+          setVisited(card, now);
+        });
+
+        cb.addEventListener('keydown', function (e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            setVisited(card, !cb.classList.contains('checked'));
+          }
+        });
+
+        card.addEventListener('click', function (e) {
+          if (e.target.closest('.custom-checkbox')) return;
+          var open = card.classList.toggle('open');
+          if (open && body) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+          } else if (body) {
+            body.style.maxHeight = '0';
+          }
+        });
+      });
+
+      /* Metas acordeón independiente */
+      document.querySelectorAll('.meta-goal-card').forEach(function (card) {
+        var header = card.querySelector('.meta-goal-header');
+        var body = card.querySelector('.meta-goal-body');
+        if (!header || !body) return;
+
+        header.addEventListener('click', function () {
+          var open = card.classList.toggle('open');
+          if (open) {
+            body.style.maxHeight = body.scrollHeight + 'px';
+          } else {
+            body.style.maxHeight = '0';
+          }
+        });
+
+        header.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            header.click();
+          }
+        });
+      });
+
+      /* Animar barras de progreso al entrar en viewport */
+      var fills = document.querySelectorAll('.progress-mini-fill');
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var fill = entry.target;
+          var w = fill.style.width;
+          fill.style.width = '0';
+          requestAnimationFrame(function () {
+            fill.style.width = w;
+          });
+          obs.unobserve(fill);
+        });
+      }, { threshold: 0.3 });
+      fills.forEach(function (f) { obs.observe(f); });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Formación Académica — Angela Raquel Canteño Córdova, UNHEVAL, Huánuco, Perú.">
+  <title>Formación | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    #daisies-container {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .daisy {
+      position: absolute;
+      animation: rotateSlow linear infinite;
+      opacity: 0.15;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .page-formacion { padding-bottom: 100px; }
+
+    .hero-formacion {
+      text-align: center;
+      padding: 100px 24px 40px;
+      background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(34, 85, 68, 0.35), transparent 55%),
+                  radial-gradient(ellipse 55% 45% at 70% 30%, rgba(26, 26, 78, 0.4), transparent 50%),
+                  radial-gradient(ellipse 50% 40% at 20% 40%, rgba(20, 60, 50, 0.2), transparent 45%);
+    }
+
+    .hero-formacion h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .hero-formacion p {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--texto-suave);
+    }
+
+    /* Tabs */
+    .tabs-formacion { margin-bottom: 48px; }
+
+    .tabs-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .tabs-formacion .tab-btn {
+      padding: 10px 18px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 50px;
+      background: var(--glass);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .tabs-formacion .tab-btn:hover {
+      border-color: rgba(255, 110, 180, 0.4);
+      color: var(--texto);
+    }
+
+    .tabs-formacion .tab-btn.active {
+      background: linear-gradient(135deg, rgba(255, 110, 180, 0.35), rgba(155, 89, 182, 0.3));
+      border-color: var(--rosa);
+      color: var(--texto);
+    }
+
+    .tab-panel { display: none; animation: fadeInUp 0.45s ease; }
+    .tab-panel.active { display: block; }
+
+    /* Layout 2 cols */
+    .edu-split {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 32px;
+      align-items: start;
+      margin-bottom: 28px;
+    }
+
+    .edu-img {
+      width: 100%;
+      max-width: 360px;
+      border-radius: var(--radius);
+      border: 3px solid var(--cian);
+      object-fit: cover;
+      aspect-ratio: 4 / 3;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .edu-info h3 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .edu-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .edu-info p {
+      line-height: 1.65;
+      overflow-wrap: break-word;
+    }
+
+    .btn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 10px 22px;
+      border-radius: 50px;
+      background: transparent;
+      border: 2px solid var(--cian);
+      color: var(--cian);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .btn-link:hover {
+      background: rgba(0, 229, 255, 0.1);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.25);
+    }
+
+    .logros-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .logro-card {
+      padding: 20px 16px;
+      text-align: center;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+
+    .logro-card:hover {
+      border-color: rgba(255, 110, 180, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .logro-card i {
+      font-size: 1.75rem;
+      color: var(--cian);
+      margin-bottom: 10px;
+    }
+
+    .logro-card h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      color: var(--rosa);
+      margin-bottom: 8px;
+    }
+
+    .logro-card p {
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+
+    .subsection-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      color: var(--cian);
+      margin: 28px 0 16px;
+    }
+
+    /* .cursos-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .curso-chip {
+      padding: 10px 12px;
+      font-size: 0.78rem;
+      text-align: center;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      color: var(--texto-suave);
+      line-height: 1.3;
+      overflow-wrap: break-word;
+    } */
+
+    /* Complementaria */
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .comp-card {
+      padding: 20px;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      transition: var(--transition);
+    }
+
+    .comp-card:hover {
+      border-color: rgba(255, 110, 180, 0.3);
+    }
+
+    .comp-card.featured {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+      align-items: center;
+      border: 2px solid #d4af37;
+      box-shadow: 0 0 24px rgba(212, 175, 55, 0.15);
+    }
+
+    .comp-card.featured img {
+      width: 100%;
+      border-radius: 12px;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border: 2px solid rgba(212, 175, 55, 0.5);
+    }
+
+    .comp-card i {
+      font-size: 1.5rem;
+      color: var(--cian);
+      margin-bottom: 10px;
+    }
+
+    .comp-card h4 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .comp-meta {
+      font-size: 0.8rem;
+      color: var(--cian);
+      margin-bottom: 8px;
+    }
+
+    .comp-card p {
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* Objetivos + progress */
+    .metas-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .meta-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 18px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+    }
+
+    .meta-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(255, 110, 180, 0.1);
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+
+    .meta-content h4 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      color: var(--rosa);
+      margin-bottom: 6px;
+    }
+
+    .meta-content p {
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 10px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 50px;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: 50px;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      transition: width 1.2s ease-out;
+    }
+
+    .progress-pct {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--cian);
+      flex-shrink: 0;
+      min-width: 36px;
+    }
+
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.1);
+    }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .edu-split { grid-template-columns: 1fr; }
+      .edu-img { max-width: 100%; }
+      .logros-grid,
+      .cursos-chips { grid-template-columns: repeat(2, 1fr); }
+      .comp-card.featured {
+        grid-template-columns: 1fr;
+      }
+      .tabs-nav { gap: 8px; }
+      .tabs-formacion .tab-btn {
+        font-size: 0.8rem;
+        padding: 8px 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logros-grid,
+      .cursos-chips,
+      .comp-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-formacion { padding-top: 88px; }
+      .meta-item { grid-template-columns: 1fr; text-align: center; }
+      .meta-icon { margin: 0 auto; }
+      .progress-wrap { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="daisies-container" aria-hidden="true"></div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="formacion.html" class="active">Formación</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+        <li><a href="proyectos.html">Proyectos</a></li>
+        <li><a href="habilidades.html">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-formacion">
+    <section class="hero-formacion">
+      <div class="container">
+        <h1>Formación Académica</h1>
+        <p>Mi trayectoria educativa completa</p>
+      </div>
+    </section>
+
+    <section class="container tabs-formacion">
+      <nav class="tabs-nav" aria-label="Etapas de formación">
+        <button type="button" class="tab-btn" data-tab="primaria">Primaria</button>
+        <button type="button" class="tab-btn" data-tab="secundaria">Secundaria</button>
+        <button type="button" class="tab-btn" data-tab="universidad">Universidad</button>
+        <button type="button" class="tab-btn" data-tab="complementaria">Complementaria</button>
+        <button type="button" class="tab-btn" data-tab="objetivos">Objetivos</button>
+      </nav>
+
+      <!-- Tab Primaria -->
+      <div class="tab-panel" data-tab="primaria">
+        <div class="edu-split">
+          <img class="edu-img" src="../assets/img/primaria.jpg" alt="Educación primaria">
+          <div class="edu-info">
+            <h3>Institución Educativa Emblemática Leandro Valle</h3>
+            <div class="edu-meta">
+              <span class="tag-chip">📍 Huánuco, Perú</span>
+              <span class="tag-chip">📅 2012 – 2016</span>
+            </div>
+            <p>
+              En primaria construí las bases de mi formación: lectura, escritura, matemáticas y valores.
+              Fue una etapa llena de descubrimientos, amistades y el primer contacto con la responsabilidad académica.
+            </p>
+            <p>
+              Participé activamente en actividades escolares y desarrollé hábitos de estudio que me acompañan hasta hoy.
+            </p>
+          </div>
+        </div>
+        <div class="logros-grid">
+          <article class="logro-card">
+            <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+            <h4>Mejor promedio del aula</h4>
+            <p>Reconocimiento por desempeño académico destacado en el quinto grado.</p>
+          </article>
+          <article class="logro-card">
+            <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+            <h4>Concurso de matemáticas</h4>
+            <p>Participación en olimpiada escolar inter-aulas de razonamiento lógico.</p>
+          </article>
+          <article class="logro-card">
+            <i class="fa-solid fa-users" aria-hidden="true"></i>
+            <h4>Representante de clase</h4>
+            <p>Liderazgo y organización en actividades del salón durante dos años.</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Tab Secundaria -->
+      <div class="tab-panel" data-tab="secundaria">
+        <div class="edu-split">
+          <img class="edu-img" src="../assets/img/secundaria.jpg" alt="Educación secundaria">
+          <div class="edu-info">
+            <h3>Colegio Nacional San Luis Gonzaga</h3>
+            <div class="edu-meta">
+              <span class="tag-chip">📍 Huánuco, Perú</span>
+              <span class="tag-chip">📅 2017 – 2021</span>
+            </div>
+            <p>
+              En secundaria fortalecí mi pensamiento crítico y descubrí mi interés por la tecnología y las ciencias.
+              Fue una etapa de crecimiento personal, preparación para la universidad y definición de metas profesionales.
+            </p>
+            <p>
+              Desarrollé habilidades de comunicación, trabajo en equipo y participación en proyectos interdisciplinarios.
+            </p>
+            <a href="#" class="btn-link" target="_blank" rel="noopener noreferrer">
+              Ver institución <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <div class="logros-grid">
+          <article class="logro-card">
+            <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+            <h4>Descubrimiento tecnológico</h4>
+            <p>Primer acercamiento a informática y herramientas digitales en el aula.</p>
+          </article>
+          <article class="logro-card">
+            <i class="fa-solid fa-flask" aria-hidden="true"></i>
+            <h4>Feria de ciencias</h4>
+            <p>Proyecto escolar sobre energía renovable presentado a nivel institucional.</p>
+          </article>
+          <article class="logro-card">
+            <i class="fa-solid fa-palette" aria-hidden="true"></i>
+            <h4>Actividades extracurriculares</h4>
+            <p>Participación en talleres de arte, deporte y club de lectura.</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Tab Universidad -->
+      <div class="tab-panel" data-tab="universidad">
+        <div class="edu-split">
+          <img class="edu-img" src="../assets/img/universidad.jpg" alt="Universidad UNHEVAL">
+          <div class="edu-info">
+            <h3>UNHEVAL — Universidad Nacional Hermilio Valdizán</h3>
+            <div class="edu-meta">
+              <span class="tag-chip">💻 Ing. de Sistemas</span>
+              <span class="tag-chip">🏛️ FIISMEC</span>
+              <span class="tag-chip">📅 Ingreso 2023</span>
+              <span class="tag-chip">📚 VII Ciclo · 2026-I</span>
+            </div>
+            <p>
+              Escuela de Ingeniería de Sistemas, Facultad de Ingeniería Industrial, Sistemas, Mecánica y Electrónica (FIISMEC).
+              Formación orientada a desarrollo de software, redes, bases de datos y gestión de proyectos tecnológicos.
+            </p>
+            <p><strong>Proyección de egreso:</strong> 2027</p>
+            <a href="https://www.unheval.edu.pe" class="btn-link" target="_blank" rel="noopener noreferrer">
+              Visitar UNHEVAL <i class="fa-solid fa-external-link-alt" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- <h4 class="subsection-title">Cursos del ciclo actual</h4>
+        <div class="cursos-chips">
+          <span class="curso-chip">Arquitectura de TI</span>
+          <span class="curso-chip">Administración de Servidores</span>
+          <span class="curso-chip">Redes y Telecomunicaciones</span>
+          <span class="curso-chip">Base de Datos</span>
+          <span class="curso-chip">Programación Web</span>
+          <span class="curso-chip">Ingeniería de Procesos</span>
+          <span class="curso-chip">Cálculo Integral</span>
+          <span class="curso-chip">Física Moderna</span>
+          <span class="curso-chip">Formulación y Evaluación de Proyectos</span>
+          <span class="curso-chip">Ecuaciones Diferenciales</span>
+        </div> -->
+
+        <div class="logros-grid">
+          <article class="logro-card">
+            <i class="fa-solid fa-code" aria-hidden="true"></i>
+            <h4>Proyectos destacados</h4>
+            <p>Desarrollo de sistemas web y APIs en cursos de programación y bases de datos.</p>
+          </article>
+          <article class="logro-card">
+            <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+            <h4>Trabajo colaborativo</h4>
+            <p>Metodologías ágiles y entregas en equipo en proyectos de ingeniería de procesos.</p>
+          </article>
+          <article class="logro-card">
+            <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
+            <h4>RSU</h4>
+            <p>Participación en responsabilidad social universitaria y actividades de servicio.</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Tab Complementaria -->
+      <div class="tab-panel" data-tab="complementaria">
+        <div class="comp-grid">
+          <article class="comp-card featured">
+            <img src="../assets/img/ingles.jpg" alt="Inglés Nivel Básico">
+            <div>
+              <h4>⭐ Inglés — Nivel Básico</h4>
+              <p class="comp-meta">Centro de Idiomas UNHEVAL · 2024 · 120 horas</p>
+              <p>
+                Curso de inglés técnico y conversacional enfocado en lectura de documentación,
+                vocabulario de tecnología y comunicación profesional básica.
+              </p>
+            </div>
+          </article>
+          <article class="comp-card">
+            <i class="fa-solid fa-user-tie" aria-hidden="true"></i>
+            <h4>Taller de Liderazgo Juvenil</h4>
+            <p class="comp-meta">Municipalidad Provincial de Huánuco · 2023 · 24 horas</p>
+            <p>Desarrollo de habilidades de liderazgo, comunicación asertiva y trabajo en equipo.</p>
+          </article>
+          <article class="comp-card">
+            <i class="fa-solid fa-file-excel" aria-hidden="true"></i>
+            <h4>Curso de Ofimática Avanzada</h4>
+            <p class="comp-meta">Instituto CEPROSEC Huánuco · 2022 · 40 horas</p>
+            <p>Excel avanzado, PowerPoint profesional y herramientas de productividad en Word.</p>
+          </article>
+          <article class="comp-card">
+            <i class="fa-solid fa-lightbulb" aria-hidden="true"></i>
+            <h4>Taller de Emprendimiento Tecnológico</h4>
+            <p class="comp-meta">Incubadora UNHEVAL — FIISMEC · 2025 · 32 horas</p>
+            <p>Modelo de negocio, pitch de proyectos tech y validación de ideas innovadoras.</p>
+          </article>
+          <article class="comp-card">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            <h4>Seminario de Ciberseguridad</h4>
+            <p class="comp-meta">Asociación Peruana de Seguridad Informática · 2025 · 16 horas</p>
+            <p>Fundamentos de seguridad, amenazas comunes y buenas prácticas de protección de datos.</p>
+          </article>
+        </div>
+      </div>
+
+      <!-- Tab Objetivos -->
+      <div class="tab-panel" data-tab="objetivos">
+        <div class="metas-list" id="metas-progreso">
+          <article class="meta-item" data-progress="70">
+            <div class="meta-icon">🎓</div>
+            <div class="meta-content">
+              <h4>Titularme como Ing. de Sistemas</h4>
+              <p>Completar mi carrera en UNHEVAL con excelencia académica y proyecto de tesis aplicado.</p>
+              <div class="progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" data-target="70"></div></div>
+                <span class="progress-pct">0%</span>
+              </div>
+            </div>
+          </article>
+          <article class="meta-item" data-progress="30">
+            <div class="meta-icon">🌐</div>
+            <div class="meta-content">
+              <h4>Certificación CCNA Cisco</h4>
+              <p>Validar conocimientos en redes, routing y switching para el mercado laboral.</p>
+              <div class="progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" data-target="30"></div></div>
+                <span class="progress-pct">0%</span>
+              </div>
+            </div>
+          </article>
+          <article class="meta-item" data-progress="20">
+            <div class="meta-icon">🔒</div>
+            <div class="meta-content">
+              <h4>Certificación CompTIA Security+</h4>
+              <p>Fortalecer mi perfil en ciberseguridad y gestión de riesgos informáticos.</p>
+              <div class="progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" data-target="20"></div></div>
+                <span class="progress-pct">0%</span>
+              </div>
+            </div>
+          </article>
+          <article class="meta-item" data-progress="15">
+            <div class="meta-icon">✈️</div>
+            <div class="meta-content">
+              <h4>Intercambio académico internacional</h4>
+              <p>Vivir una experiencia multicultural y ampliar mi visión profesional en el extranjero.</p>
+              <div class="progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" data-target="15"></div></div>
+                <span class="progress-pct">0%</span>
+              </div>
+            </div>
+          </article>
+          <article class="meta-item" data-progress="10">
+            <div class="meta-icon">📚</div>
+            <div class="meta-content">
+              <h4>Posgrado en Ciberseguridad</h4>
+              <p>Continuar mi formación con una especialización después de titularme.</p>
+              <div class="progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" data-target="10"></div></div>
+                <span class="progress-pct">0%</span>
+              </div>
+            </div>
+          </article>
+          <article class="meta-item" data-progress="25">
+            <div class="meta-icon">📄</div>
+            <div class="meta-content">
+              <h4>Publicar investigación académica</h4>
+              <p>Elaborar y publicar un artículo vinculado a mis proyectos de ingeniería de sistemas.</p>
+              <div class="progress-wrap">
+                <div class="progress-bar"><div class="progress-fill" data-target="25"></div></div>
+                <span class="progress-pct">0%</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="sobre-mi.html">🙋 Sobre Mí</a>
+        <a href="cursos.html">📚 Cursos</a>
+        <a href="certificados.html">🏆 Certificados</a>
+        <a href="proyectos.html">💻 Proyectos</a>
+        <a href="habilidades.html">🛠️ Habilidades</a>
+        <a href="eventos.html">🎉 Eventos</a>
+        <a href="viajes-metas.html">✈️ Metas</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      /* Margaritas / flores de fondo */
+      var container = document.getElementById('daisies-container');
+      if (container) {
+        var emojis = ['🌼', '🌸'];
+        for (var i = 0; i < 15; i++) {
+          var d = document.createElement('div');
+          d.className = 'daisy';
+          var size = Math.floor(Math.random() * 41) + 30;
+          var duration = (Math.random() * 12 + 8).toFixed(1);
+          var delay = (Math.random() * 10).toFixed(1);
+          d.style.width = size + 'px';
+          d.style.height = size + 'px';
+          d.style.fontSize = size + 'px';
+          d.style.left = Math.random() * 100 + '%';
+          d.style.top = Math.random() * 100 + '%';
+          d.style.animationDuration = duration + 's';
+          d.style.animationDelay = delay + 's';
+          d.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          container.appendChild(d);
+        }
+      }
+
+      /* Barras de progreso al entrar en viewport */
+      var fills = document.querySelectorAll('.progress-fill[data-target]');
+      if (!fills.length) return;
+
+      function animateBar(fill) {
+        var target = parseInt(fill.dataset.target, 10);
+        if (isNaN(target)) return;
+        var wrap = fill.closest('.meta-item');
+        var pctEl = wrap ? wrap.querySelector('.progress-pct') : null;
+        requestAnimationFrame(function () {
+          fill.style.width = target + '%';
+          if (pctEl) pctEl.textContent = target + '%';
+        });
+      }
+
+      var observed = new WeakSet();
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var fill = entry.target;
+            if (observed.has(fill)) return;
+            observed.add(fill);
+            animateBar(fill);
+            observer.unobserve(fill);
+          });
+        },
+        { threshold: 0.3, rootMargin: '0px 0px -20px 0px' }
+      );
+
+      fills.forEach(function (fill) {
+        observer.observe(fill);
+      });
+
+      /* Re-animar barras si el tab objetivos se muestra después */
+      document.querySelectorAll('.tabs-formacion .tab-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          if (btn.dataset.tab !== 'objetivos') return;
+          setTimeout(function () {
+            fills.forEach(function (fill) {
+              if (fill.style.width && fill.style.width !== '0px') return;
+              var rect = fill.getBoundingClientRect();
+              if (rect.top < window.innerHeight && rect.bottom > 0) {
+                animateBar(fill);
+              }
+            });
+          }, 100);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

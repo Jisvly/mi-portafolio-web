@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mis Proyectos — Angela Raquel Canteño Córdova, Ingeniería de Sistemas UNHEVAL.">
+  <title>Proyectos | Angela Raquel Canteño Córdova</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .page-proyectos { padding-bottom: 100px; }
+
+    .hero-proy {
+      text-align: center;
+      padding: 100px 24px 36px;
+      background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(155, 89, 182, 0.35), transparent 55%),
+                  radial-gradient(ellipse 50% 45% at 80% 30%, rgba(26, 26, 78, 0.5), transparent 50%);
+    }
+
+    .hero-proy h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--rosa), var(--cian));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .hero-proy p { color: var(--texto-suave); max-width: 520px; margin: 0 auto; }
+
+    /* Filtros */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, var(--rosa), var(--morado));
+      border-color: transparent;
+      color: var(--texto);
+      box-shadow: 0 4px 20px rgba(255, 110, 180, 0.35);
+    }
+
+    /* Grid */
+    .proy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .proy-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px;
+      transition: var(--transition);
+      overflow-wrap: break-word;
+    }
+
+    .proy-card.hidden-filter {
+      display: none;
+    }
+
+    .proy-card.show-filter {
+      display: flex;
+      animation: fadeInUp 0.45s ease forwards;
+    }
+
+    .proy-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 30px rgba(0, 229, 255, 0.2);
+      border-color: rgba(0, 229, 255, 0.35);
+    }
+
+    .proy-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 8px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(155, 89, 182, 0.2));
+    }
+
+    .proy-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .proy-img-wrap.no-img img { display: none; }
+
+    .proy-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.75rem;
+    }
+
+    .proy-img-wrap.no-img .proy-fallback { display: flex; }
+
+    .badge-cat {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      width: fit-content;
+    }
+
+    .cat-web { background: rgba(0, 229, 255, 0.15); border: 1px solid rgba(0, 229, 255, 0.4); color: var(--cian); }
+    .cat-bd { background: rgba(155, 89, 182, 0.2); border: 1px solid rgba(155, 89, 182, 0.45); color: #c8a0e8; }
+    .cat-iot { background: rgba(80, 200, 120, 0.15); border: 1px solid rgba(80, 200, 120, 0.45); color: #6ee89a; }
+    .cat-redes { background: rgba(60, 130, 255, 0.15); border: 1px solid rgba(60, 130, 255, 0.45); color: #7eb0ff; }
+    .cat-procesos { background: rgba(212, 175, 55, 0.15); border: 1px solid rgba(212, 175, 55, 0.45); color: #e8c96a; }
+    .cat-social { background: rgba(255, 110, 180, 0.15); border: 1px solid rgba(255, 110, 180, 0.4); color: var(--rosa); }
+
+    .proy-card h3 {
+      font-weight: 700;
+      color: var(--texto);
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .proy-short {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tech-chip {
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+    }
+
+    .proy-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .proy-actions .btn-primary,
+    .proy-actions .btn-secondary {
+      padding: 8px 16px;
+      font-size: 0.78rem;
+    }
+
+    /* Lightbox proyectos */
+    #proy-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(5, 5, 16, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    #proy-lightbox.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .proy-lb-box {
+      position: relative;
+      width: 92%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      background: rgba(13, 13, 43, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      animation: fadeInUp 0.35s ease;
+    }
+
+    .proy-lb-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      color: var(--rosa);
+      font-size: 1.75rem;
+      cursor: pointer;
+      z-index: 2;
+      line-height: 1;
+    }
+
+    .proy-lb-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .proy-lb-img img {
+      width: 100%;
+      border-radius: 12px;
+      max-height: 320px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .proy-lb-img .lb-fallback {
+      display: none;
+      aspect-ratio: 16/9;
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(155, 89, 182, 0.2));
+    }
+
+    .proy-lb-img.no-img img { display: none; }
+    .proy-lb-img.no-img .lb-fallback { display: flex; }
+
+    .proy-lb-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--rosa);
+      font-size: 1.15rem;
+      margin: 10px 0 12px;
+      line-height: 1.35;
+    }
+
+    .proy-lb-desc {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      margin-bottom: 16px;
+      color: var(--texto-suave);
+    }
+
+    .lb-section-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--rosa);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .lb-tech-chip {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      background: rgba(0, 229, 255, 0.12);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      color: var(--cian);
+      margin: 3px;
+    }
+
+    .learn-list {
+      list-style: none;
+      margin-bottom: 16px;
+    }
+
+    .learn-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      color: var(--texto-suave);
+    }
+
+    .learn-list .check {
+      color: var(--cian);
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    .status-chip {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .status-done {
+      background: rgba(80, 200, 120, 0.2);
+      border: 1px solid rgba(80, 200, 120, 0.5);
+      color: #6ee89a;
+    }
+
+    .status-progress {
+      background: rgba(255, 200, 50, 0.15);
+      border: 1px solid rgba(255, 200, 50, 0.45);
+      color: #ffd966;
+    }
+
+    .nav-pills-section { text-align: center; padding: 20px 0 40px; }
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .nav-pills a {
+      padding: 10px 20px;
+      font-size: 0.875rem;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      color: var(--texto-suave);
+      transition: var(--transition);
+    }
+    .nav-pills a:hover {
+      border-color: var(--rosa);
+      color: var(--texto);
+    }
+
+    .nav-menu a.active {
+      color: var(--texto);
+      background: rgba(255, 110, 180, 0.12);
+    }
+
+    @media (max-width: 900px) {
+      .proy-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .proy-lb-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .proy-grid { grid-template-columns: 1fr; }
+      .hero-proy { padding-top: 88px; }
+      .proy-lb-box { padding: 22px 16px; width: 95%; }
+      .proy-actions { flex-direction: column; }
+      .proy-actions .btn-primary,
+      .proy-actions .btn-secondary { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="../index.html" class="navbar-logo">A.C.C</a>
+      <button class="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="sobre-mi.html">Sobre Mí</a></li>
+        <li><a href="formacion.html">Formación</a></li>
+        <li><a href="cursos.html">Cursos</a></li>
+        <li><a href="certificados.html">Certificados</a></li>
+        <li><a href="proyectos.html" class="active">Proyectos</a></li>
+        <li><a href="habilidades.html">Habilidades</a></li>
+        <li><a href="eventos.html">Eventos</a></li>
+        <li><a href="viajes-metas.html">Metas</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page-proyectos">
+    <section class="hero-proy">
+      <div class="container">
+        <h1>Mis Proyectos</h1>
+        <p>Soluciones tecnológicas que he desarrollado</p>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="filter-bar" role="tablist" aria-label="Filtrar por categoría">
+        <button type="button" class="filter-btn active" data-filter="todos">Todos</button>
+        <button type="button" class="filter-btn" data-filter="web">Web</button>
+        <button type="button" class="filter-btn" data-filter="bd">Bases de Datos</button>
+        <button type="button" class="filter-btn" data-filter="iot">Hardware/IoT</button>
+        <button type="button" class="filter-btn" data-filter="redes">Redes</button>
+        <button type="button" class="filter-btn" data-filter="procesos">Procesos</button>
+        <button type="button" class="filter-btn" data-filter="social">Social</button>
+      </div>
+
+      <div class="proy-grid" id="proy-grid">
+
+        <article class="glass-card proy-card show-filter" data-category="web"
+          data-img="../assets/img/proyecto1.jpg" data-emoji="🌐"
+          data-title="Sistema Web de Gestión Académica"
+          data-cat-label="Web" data-cat-class="cat-web"
+          data-tech="Python/Django,HTML,CSS,MySQL"
+          data-status="completado"
+          data-desc="Plataforma web integral para gestionar matrículas, notas, asistencias y reportes académicos de una institución educativa. Incluye panel administrativo, roles de usuario y generación de informes en PDF. Desarrollado con arquitectura MVC y base de datos relacional normalizada."
+          data-learn="Implementación de autenticación y roles de usuario|Diseño de modelos relacionales en Django ORM|Despliegue de aplicación web con buenas prácticas de seguridad">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto1.jpg" alt="Sistema Web de Gestión Académica" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🌐</div>
+          </div>
+          <span class="badge-cat cat-web">Web</span>
+          <h3>Sistema Web de Gestión Académica</h3>
+          <p class="proy-short">Plataforma para matrículas, notas y reportes académicos con panel administrativo.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">Python/Django</span>
+            <span class="tech-chip">HTML</span>
+            <span class="tech-chip">CSS</span>
+            <span class="tech-chip">MySQL</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>
+          </div> -->
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="bd"
+          data-img="../assets/img/proyecto2.jpg" data-emoji="🗄️"
+          data-title="Base de Datos para Institución Educativa"
+          data-cat-label="Bases de Datos" data-cat-class="cat-bd"
+          data-tech="MySQL,SQL,Modelado ER"
+          data-status="completado"
+          data-desc="Diseño e implementación de una base de datos relacional para una institución educativa con más de 15 entidades, integridad referencial, procedimientos almacenados y consultas optimizadas para reportes de matrícula y rendimiento académico."
+          data-learn="Modelado entidad-relación con normalización 3FN|Consultas SQL complejas con joins y agregaciones|Documentación de diccionario de datos y diagramas ER">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto2.jpg" alt="Base de Datos Institución Educativa" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🗄️</div>
+          </div>
+          <span class="badge-cat cat-bd">Bases de Datos</span>
+          <h3>Base de Datos para Institución Educativa</h3>
+          <p class="proy-short">Modelo relacional completo con procedimientos y reportes académicos.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">MySQL</span>
+            <span class="tech-chip">SQL</span>
+            <span class="tech-chip">Modelado ER</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="iot"
+          data-img="../assets/img/proyecto3.jpg" data-emoji="🗑️"
+          data-title="Tacho Inteligente"
+          data-cat-label="Hardware/IoT" data-cat-class="cat-iot"
+          data-tech="Arduino,C++,Sensores ultrasónicos"
+          data-status="completado"
+          data-desc="Sistema embebido que detecta el nivel de llenado de un contenedor mediante sensores ultrasónicos y alerta cuando requiere vaciado. Incluye prototipo físico, programación en Arduino y calibración de distancias para distintos tipos de residuos."
+          data-learn="Integración de sensores ultrasónicos HC-SR04|Programación de lógica en C++ para Arduino|Prototipado y pruebas de hardware en laboratorio">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto3.jpg" alt="Tacho Inteligente" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🗑️</div>
+          </div>
+          <span class="badge-cat cat-iot">Hardware/IoT</span>
+          <h3>Tacho Inteligente</h3>
+          <p class="proy-short">Contenedor con sensor ultrasónico y alerta de llenado automatizada.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">Arduino</span>
+            <span class="tech-chip">C++</span>
+            <span class="tech-chip">Ultrasónicos</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="web"
+          data-img="../assets/img/proyecto4.jpg" data-emoji="💼"
+          data-title="Portafolio Web Profesional"
+          data-cat-label="Web" data-cat-class="cat-web"
+          data-tech="HTML,CSS,JavaScript,Docker"
+          data-status="progreso"
+          data-desc="Sitio web personal con estética glassmorphism, múltiples secciones temáticas, animaciones CSS y despliegue containerizado. Documenta mi trayectoria académica, proyectos, certificados y metas como futura ingeniera de sistemas."
+          data-learn="Diseño responsive sin frameworks CSS|Animaciones e interactividad con JavaScript puro|Preparación para despliegue con Docker">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto4.jpg" alt="Portafolio Web Profesional" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">💼</div>
+          </div>
+          <span class="badge-cat cat-web">Web</span>
+          <h3>Portafolio Web Profesional</h3>
+          <p class="proy-short">Este portafolio: glassmorphism, animaciones y despliegue Docker.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">HTML</span>
+            <span class="tech-chip">CSS</span>
+            <span class="tech-chip">JavaScript</span>
+            <span class="tech-chip">Docker</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="iot"
+          data-img="../assets/img/proyecto5.jpg" data-emoji="🚦"
+          data-title="Semáforo Inteligente"
+          data-cat-label="Hardware/IoT" data-cat-class="cat-iot"
+          data-tech="Arduino,C++,LEDs,Temporización"
+          data-status="completado"
+          data-desc="Simulación de semáforo con Arduino controlando secuencias de LEDs rojo, amarillo y verde con tiempos configurables. Proyecto de fundamentos de automatización, temporización y control de salidas digitales en sistemas embebidos."
+          data-learn="Control de secuencias temporizadas con millis()|Manejo de múltiples salidas digitales|Documentación de diagramas de conexión">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto5.jpg" alt="Semáforo Inteligente" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🚦</div>
+          </div>
+          <span class="badge-cat cat-iot">Hardware/IoT</span>
+          <h3>Semáforo Inteligente</h3>
+          <p class="proy-short">Semáforo con Arduino y secuencias de LEDs programables.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">Arduino</span>
+            <span class="tech-chip">C++</span>
+            <span class="tech-chip">LEDs</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="redes"
+          data-img="../assets/img/proyecto6.jpg" data-emoji="🔌"
+          data-title="Cableado Estructurado de una Edificación"
+          data-cat-label="Redes" data-cat-class="cat-redes"
+          data-tech="TIA/EIA,Rack,Patch panel"
+          data-status="completado"
+          data-desc="Diseño e implementación documentada de infraestructura de cableado estructurado para un edificio de tres pisos según normas TIA/EIA. Incluye plano de rack, patch panel, canalización y pruebas de continuidad con certificador."
+          data-learn="Aplicación de estándares TIA/EIA en proyectos reales|Organización de rack y etiquetado de puntos de red|Pruebas de certificación de cableado con herramientas adecuadas">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto6.jpg" alt="Cableado Estructurado" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🔌</div>
+          </div>
+          <span class="badge-cat cat-redes">Redes</span>
+          <h3>Cableado Estructurado de una Edificación</h3>
+          <p class="proy-short">Infraestructura de red física según normas TIA/EIA con rack y patch panel.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">TIA/EIA</span>
+            <span class="tech-chip">Rack</span>
+            <span class="tech-chip">Patch panel</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="procesos"
+          data-img="../assets/img/proyecto7.jpg" data-emoji="📊"
+          data-title="Diseño y Gestión de Procesos de una Organización"
+          data-cat-label="Procesos" data-cat-class="cat-procesos"
+          data-tech="BPMN,Bizagi,Flujogramas"
+          data-status="completado"
+          data-desc="Mapeo y rediseño de procesos administrativos de una organización ficticia usando notación BPMN. Análisis AS-IS y TO-BE con propuesta de mejora, indicadores KPI y diagramas en Bizagi para simulación de flujos."
+          data-learn="Modelado BPMN de procesos de negocio|Análisis de cuellos de botella y propuestas TO-BE|Uso de Bizagi para documentación y simulación">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto7.jpg" alt="Gestión de Procesos" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">📊</div>
+          </div>
+          <span class="badge-cat cat-procesos">Procesos</span>
+          <h3>Diseño y Gestión de Procesos de una Organización</h3>
+          <p class="proy-short">Mapeo BPMN AS-IS/TO-BE con indicadores y simulación en Bizagi.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">BPMN</span>
+            <span class="tech-chip">Bizagi</span>
+            <span class="tech-chip">Flujogramas</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="social"
+          data-img="../assets/img/proyecto8.jpg" data-emoji="🤝"
+          data-title="Proyectos RSU — Enseñanza en Colegios"
+          data-cat-label="Social" data-cat-class="cat-social"
+          data-tech="Didáctica,TIC,Trabajo en equipo"
+          data-status="completado"
+          data-desc="Proyecto de responsabilidad social universitaria orientado a enseñar fundamentos de TIC a estudiantes de colegios de Huánuco. Talleres prácticos de ofimática, internet seguro y pensamiento computacional con material didáctico adaptado."
+          data-learn="Planificación de talleres educativos para niños y jóvenes|Comunicación efectiva con públicos diversos|Trabajo colaborativo en equipos multidisciplinarios">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto8.jpg" alt="Proyectos RSU" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🤝</div>
+          </div>
+          <span class="badge-cat cat-social">Social</span>
+          <h3>Proyectos RSU — Enseñanza en Colegios</h3>
+          <p class="proy-short">Talleres de TIC y pensamiento computacional en colegios de Huánuco.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">Didáctica</span>
+            <span class="tech-chip">TIC</span>
+            <span class="tech-chip">Trabajo en equipo</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="iot"
+          data-img="../assets/img/proyecto9.jpg" data-emoji="🏠"
+          data-title="Domótica — Automatización del Hogar"
+          data-cat-label="Hardware/IoT" data-cat-class="cat-iot"
+          data-tech="Arduino,ESP32,Sensores,App móvil"
+          data-status="progreso"
+          data-desc="Sistema de automatización residencial con sensores de temperatura, humedad y presencia conectados a ESP32. Control remoto de iluminación y monitoreo desde aplicación móvil en desarrollo para integración IoT completa."
+          data-learn="Comunicación WiFi con microcontroladores ESP32|Integración de múltiples sensores ambientales|Diseño de interfaz móvil para monitoreo IoT">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto9.jpg" alt="Domótica" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🏠</div>
+          </div>
+          <span class="badge-cat cat-iot">Hardware/IoT</span>
+          <h3>Domótica — Automatización del Hogar</h3>
+          <p class="proy-short">Automatización con ESP32, sensores y app móvil en desarrollo.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">Arduino</span>
+            <span class="tech-chip">ESP32</span>
+            <span class="tech-chip">Sensores</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+        <article class="glass-card proy-card show-filter" data-category="redes"
+          data-img="../assets/img/proyecto10.jpg" data-emoji="🌐"
+          data-title="Diseño de Topología y Redes Protocolo Estático"
+          data-cat-label="Redes" data-cat-class="cat-redes"
+          data-tech="Cisco Packet Tracer,OSPF,Static Routing"
+          data-status="completado"
+          data-desc="Diseño de red empresarial en Cisco Packet Tracer con enrutamiento estático y protocolo OSPF entre sucursales. Configuración de VLANs, ACLs básicas y verificación de conectividad end-to-end con documentación técnica completa."
+          data-learn="Configuración de OSPF y routing estático en routers Cisco|Segmentación de red con VLANs y subredes|Elaboración de informes técnicos de topología de red">
+          <div class="proy-img-wrap">
+            <img src="../assets/img/proyecto10.jpg" alt="Topología de Redes" loading="lazy">
+            <div class="proy-fallback" aria-hidden="true">🌐</div>
+          </div>
+          <span class="badge-cat cat-redes">Redes</span>
+          <h3>Diseño de Topología y Redes Protocolo Estático</h3>
+          <p class="proy-short">Red empresarial en Packet Tracer con OSPF, VLANs y routing estático.</p>
+          <div class="tech-chips">
+            <span class="tech-chip">Packet Tracer</span>
+            <span class="tech-chip">OSPF</span>
+            <span class="tech-chip">Static Routing</span>
+          </div>
+          <div class="proy-actions">
+            <button type="button" class="btn-primary btn-ver-mas">Ver más</button>
+            <!-- <a href="#" class="btn-secondary" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a> -->
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section class="nav-pills-section container">
+      <h2 class="section-title" style="text-align:center;display:block;width:100%">Explorar más</h2>
+      <div class="nav-pills">
+        <a href="sobre-mi.html">🙋 Sobre Mí</a>
+        <a href="formacion.html">🎓 Formación</a>
+        <a href="cursos.html">📚 Cursos</a>
+        <a href="certificados.html">🏆 Certificados</a>
+        <a href="habilidades.html">🛠️ Habilidades</a>
+        <a href="eventos.html">🎉 Eventos</a>
+        <a href="viajes-metas.html">✈️ Metas</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Conéctate conmigo</p>
+      <div class="footer-social">
+        <a href="https://facebook.com/angela.canteno" class="social-icon facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i>
+        </a>
+        <a href="https://instagram.com/jisvly?igsh=MXY1YnVvYzBodHlzaQ==" class="social-icon instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="https://www.tiktok.com/@lixpupin?_r=1&_t=ZS-96fimWKmJ09" class="social-icon tiktok" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <i class="fa-brands fa-tiktok" aria-hidden="true"></i>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Angela Raquel Canteño Córdova</p>
+    </div>
+  </footer>
+
+  <a href="../index.html" class="btn-back">
+    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Inicio
+  </a>
+
+  <div id="proy-lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="proy-lb-box" id="proy-lb-box">
+      <button type="button" class="proy-lb-close" aria-label="Cerrar">&times;</button>
+      <div class="proy-lb-grid">
+        <div class="proy-lb-img" id="proy-lb-img-wrap">
+          <img id="proy-lb-img" src="" alt="">
+          <div class="lb-fallback" id="proy-lb-fallback">💻</div>
+        </div>
+        <div class="proy-lb-info">
+          <span class="badge-cat" id="proy-lb-badge">Web</span>
+          <h2 class="proy-lb-title" id="proy-lb-title"></h2>
+          <p class="proy-lb-desc" id="proy-lb-desc"></p>
+          <p class="lb-section-label">Tecnologías</p>
+          <div id="proy-lb-tech"></div>
+          <p class="lb-section-label">Lo que aprendí</p>
+          <ul class="learn-list" id="proy-lb-learn"></ul>
+          <p class="lb-section-label">Estado</p>
+          <span class="status-chip" id="proy-lb-status"></span>
+          <!-- <a href="#" id="proy-lb-github" class="btn-secondary" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-github" aria-hidden="true"></i> Ver en GitHub -->
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function () {
+      /* Partículas canvas */
+      var canvas = document.getElementById('particles-canvas');
+      var ctx, particles = [], animId;
+      var colors = ['#00e5ff', '#ff6eb4', '#9b59b6'];
+      var linkDist = 120;
+
+      function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      function initParticles() {
+        particles = [];
+        for (var i = 0; i < 60; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8,
+            r: Math.random() * 2.5 + 1,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < particles.length; i++) {
+          var p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+
+          for (var j = i + 1; j < particles.length; j++) {
+            var q = particles[j];
+            var dx = p.x - q.x;
+            var dy = p.y - q.y;
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < linkDist) {
+              var alpha = (1 - dist / linkDist) * 0.35;
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.strokeStyle = 'rgba(0, 229, 255, ' + alpha + ')';
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+        animId = requestAnimationFrame(drawParticles);
+      }
+
+      if (canvas) {
+        ctx = canvas.getContext('2d');
+        resizeCanvas();
+        initParticles();
+        drawParticles();
+        window.addEventListener('resize', function () {
+          resizeCanvas();
+          initParticles();
+        });
+      }
+
+      /* Fallback imágenes */
+      document.querySelectorAll('.proy-img-wrap img').forEach(function (img) {
+        img.addEventListener('error', function () {
+          img.closest('.proy-img-wrap').classList.add('no-img');
+        });
+      });
+
+      /* Filtros */
+      var filterBtns = document.querySelectorAll('.filter-btn');
+      var cards = document.querySelectorAll('.proy-card');
+
+      filterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          filterBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var filter = btn.dataset.filter;
+
+          cards.forEach(function (card) {
+            var cat = card.dataset.category;
+            var show = filter === 'todos' || cat === filter;
+            card.classList.remove('show-filter', 'hidden-filter');
+            if (show) {
+              card.classList.add('show-filter');
+            } else {
+              card.classList.add('hidden-filter');
+            }
+          });
+        });
+      });
+
+      /* Lightbox */
+      var lb = document.getElementById('proy-lightbox');
+      var lbBox = document.getElementById('proy-lb-box');
+      var lbImg = document.getElementById('proy-lb-img');
+      var lbImgWrap = document.getElementById('proy-lb-img-wrap');
+      var lbFallback = document.getElementById('proy-lb-fallback');
+      var lbTitle = document.getElementById('proy-lb-title');
+      var lbDesc = document.getElementById('proy-lb-desc');
+      var lbBadge = document.getElementById('proy-lb-badge');
+      var lbTech = document.getElementById('proy-lb-tech');
+      var lbLearn = document.getElementById('proy-lb-learn');
+      var lbStatus = document.getElementById('proy-lb-status');
+      var lbClose = lb.querySelector('.proy-lb-close');
+
+      function openLb(card) {
+        lbImg.src = card.dataset.img;
+        lbImg.alt = card.dataset.title;
+        lbImgWrap.classList.remove('no-img');
+        lbFallback.textContent = card.dataset.emoji || '💻';
+        lbImg.onerror = function () { lbImgWrap.classList.add('no-img'); };
+        lbImg.onload = function () { lbImgWrap.classList.remove('no-img'); };
+
+        lbTitle.textContent = card.dataset.title;
+        lbDesc.textContent = card.dataset.desc;
+        lbBadge.textContent = card.dataset.catLabel;
+        lbBadge.className = 'badge-cat ' + card.dataset.catClass;
+
+        lbTech.innerHTML = '';
+        (card.dataset.tech || '').split(',').forEach(function (t) {
+          var c = document.createElement('span');
+          c.className = 'lb-tech-chip';
+          c.textContent = t.trim();
+          lbTech.appendChild(c);
+        });
+
+        lbLearn.innerHTML = '';
+        (card.dataset.learn || '').split('|').forEach(function (item) {
+          var li = document.createElement('li');
+          li.innerHTML = '<span class="check">✓</span> ' + item.trim();
+          lbLearn.appendChild(li);
+        });
+
+        if (card.dataset.status === 'progreso') {
+          lbStatus.textContent = 'En progreso';
+          lbStatus.className = 'status-chip status-progress';
+        } else {
+          lbStatus.textContent = 'Completado';
+          lbStatus.className = 'status-chip status-done';
+        }
+
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLb() {
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+
+      document.querySelectorAll('.btn-ver-mas').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          openLb(btn.closest('.proy-card'));
+        });
+      });
+
+      lbClose.addEventListener('click', closeLb);
+      lb.addEventListener('click', function (e) {
+        if (e.target === lb) closeLb();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lb.classList.contains('open')) closeLb();
+      });
+    })();
+  </script>
+</body>
+</html>
